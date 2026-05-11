@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { Button } from "@/components/ui/button";
+import { RequestRoleAccess } from "@/components/site/RequestRoleAccess";
 
 export const Route = createFileRoute("/_authenticated/affiliates/dashboard")({
   head: () => ({
