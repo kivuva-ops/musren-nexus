@@ -34,6 +34,7 @@ export type Database = {
       }
       affiliate_events: {
         Row: {
+          channel: Database["public"]["Enums"]["share_channel"] | null
           code: string
           id: string
           ip_hash: string | null
@@ -48,6 +49,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          channel?: Database["public"]["Enums"]["share_channel"] | null
           code: string
           id?: string
           ip_hash?: string | null
@@ -62,6 +64,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          channel?: Database["public"]["Enums"]["share_channel"] | null
           code?: string
           id?: string
           ip_hash?: string | null
@@ -224,6 +227,33 @@ export type Database = {
           revenue_share_bps?: number
           signup_points?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      affiliate_shares: {
+        Row: {
+          channel: Database["public"]["Enums"]["share_channel"]
+          code: string
+          id: string
+          occurred_at: string
+          product_slug: string | null
+          user_id: string
+        }
+        Insert: {
+          channel: Database["public"]["Enums"]["share_channel"]
+          code: string
+          id?: string
+          occurred_at?: string
+          product_slug?: string | null
+          user_id: string
+        }
+        Update: {
+          channel?: Database["public"]["Enums"]["share_channel"]
+          code?: string
+          id?: string
+          occurred_at?: string
+          product_slug?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -425,6 +455,48 @@ export type Database = {
         }
         Relationships: []
       }
+      product_assets: {
+        Row: {
+          active: boolean
+          body_text: string | null
+          created_at: string
+          created_by: string | null
+          file_url: string | null
+          id: string
+          kind: Database["public"]["Enums"]["product_asset_kind"]
+          notes: string | null
+          product_slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          body_text?: string | null
+          created_at?: string
+          created_by?: string | null
+          file_url?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["product_asset_kind"]
+          notes?: string | null
+          product_slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          body_text?: string | null
+          created_at?: string
+          created_by?: string | null
+          file_url?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["product_asset_kind"]
+          notes?: string | null
+          product_slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           auth_verified: boolean
@@ -520,6 +592,39 @@ export type Database = {
           status?: Database["public"]["Enums"]["role_request_status"]
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      share_templates: {
+        Row: {
+          active: boolean
+          body: string
+          channel: Database["public"]["Enums"]["share_channel"]
+          created_at: string
+          cta: string | null
+          id: string
+          product_slug: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          body: string
+          channel: Database["public"]["Enums"]["share_channel"]
+          created_at?: string
+          cta?: string | null
+          id?: string
+          product_slug: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          body?: string
+          channel?: Database["public"]["Enums"]["share_channel"]
+          created_at?: string
+          cta?: string | null
+          id?: string
+          product_slug?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -732,17 +837,30 @@ export type Database = {
         }
         Returns: string
       }
-      affiliate_track_event: {
-        Args: {
-          _code: string
-          _ip_hash: string
-          _kind: Database["public"]["Enums"]["affiliate_event_kind"]
-          _product_slug: string
-          _revenue_cents?: number
-          _ua_hash: string
-        }
-        Returns: string
-      }
+      affiliate_track_event:
+        | {
+            Args: {
+              _code: string
+              _ip_hash: string
+              _kind: Database["public"]["Enums"]["affiliate_event_kind"]
+              _product_slug: string
+              _revenue_cents?: number
+              _ua_hash: string
+            }
+            Returns: string
+          }
+        | {
+            Args: {
+              _channel?: Database["public"]["Enums"]["share_channel"]
+              _code: string
+              _ip_hash: string
+              _kind: Database["public"]["Enums"]["affiliate_event_kind"]
+              _product_slug: string
+              _revenue_cents?: number
+              _ua_hash: string
+            }
+            Returns: string
+          }
       claim_first_superadmin: { Args: never; Returns: boolean }
       complete_onboarding: {
         Args: {
@@ -850,8 +968,28 @@ export type Database = {
       ledger_kind: "earn" | "redeem" | "payout" | "adjust" | "refund"
       loyalty_rate_kind: "cash" | "airtime" | "data"
       preferred_contact: "Email" | "Phone call" | "WhatsApp"
+      product_asset_kind:
+        | "poster"
+        | "logo"
+        | "video"
+        | "sms_template"
+        | "whatsapp_template"
+        | "email_copy"
+        | "social_caption"
+        | "script"
+        | "other"
       profile_role: "customer" | "affiliate" | "merchant" | "developer"
       role_request_status: "pending" | "approved" | "rejected"
+      share_channel:
+        | "whatsapp"
+        | "sms"
+        | "email"
+        | "facebook"
+        | "instagram"
+        | "tiktok"
+        | "x"
+        | "telegram"
+        | "copy"
       withdrawal_method: "mpesa" | "airtime" | "data"
       withdrawal_status: "pending" | "approved" | "rejected" | "paid" | "failed"
     }
@@ -1003,8 +1141,30 @@ export const Constants = {
       ledger_kind: ["earn", "redeem", "payout", "adjust", "refund"],
       loyalty_rate_kind: ["cash", "airtime", "data"],
       preferred_contact: ["Email", "Phone call", "WhatsApp"],
+      product_asset_kind: [
+        "poster",
+        "logo",
+        "video",
+        "sms_template",
+        "whatsapp_template",
+        "email_copy",
+        "social_caption",
+        "script",
+        "other",
+      ],
       profile_role: ["customer", "affiliate", "merchant", "developer"],
       role_request_status: ["pending", "approved", "rejected"],
+      share_channel: [
+        "whatsapp",
+        "sms",
+        "email",
+        "facebook",
+        "instagram",
+        "tiktok",
+        "x",
+        "telegram",
+        "copy",
+      ],
       withdrawal_method: ["mpesa", "airtime", "data"],
       withdrawal_status: ["pending", "approved", "rejected", "paid", "failed"],
     },
