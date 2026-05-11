@@ -14,6 +14,246 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_treasury: {
+        Row: {
+          balance_cash_cents: number
+          id: number
+          updated_at: string
+        }
+        Insert: {
+          balance_cash_cents?: number
+          id?: number
+          updated_at?: string
+        }
+        Update: {
+          balance_cash_cents?: number
+          id?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      affiliate_events: {
+        Row: {
+          code: string
+          id: string
+          ip_hash: string | null
+          kind: Database["public"]["Enums"]["affiliate_event_kind"]
+          multiplier_applied: number
+          occurred_at: string
+          points_awarded: number
+          product_slug: string | null
+          promotion_id: string | null
+          revenue_cents: number
+          ua_hash: string | null
+          user_id: string
+        }
+        Insert: {
+          code: string
+          id?: string
+          ip_hash?: string | null
+          kind: Database["public"]["Enums"]["affiliate_event_kind"]
+          multiplier_applied?: number
+          occurred_at?: string
+          points_awarded?: number
+          product_slug?: string | null
+          promotion_id?: string | null
+          revenue_cents?: number
+          ua_hash?: string | null
+          user_id: string
+        }
+        Update: {
+          code?: string
+          id?: string
+          ip_hash?: string | null
+          kind?: Database["public"]["Enums"]["affiliate_event_kind"]
+          multiplier_applied?: number
+          occurred_at?: string
+          points_awarded?: number
+          product_slug?: string | null
+          promotion_id?: string | null
+          revenue_cents?: number
+          ua_hash?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      affiliate_notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          read?: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      affiliate_promotions: {
+        Row: {
+          active: boolean
+          created_at: string
+          created_by: string | null
+          description: string | null
+          ends_at: string | null
+          id: string
+          multiplier: number
+          name: string
+          notify_affiliates: boolean
+          public_visible: boolean
+          starts_at: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          multiplier?: number
+          name: string
+          notify_affiliates?: boolean
+          public_visible?: boolean
+          starts_at?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          multiplier?: number
+          name?: string
+          notify_affiliates?: boolean
+          public_visible?: boolean
+          starts_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      affiliate_referral_codes: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          id: string
+          label: string | null
+          product_slug: string | null
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          id?: string
+          label?: string | null
+          product_slug?: string | null
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          id?: string
+          label?: string | null
+          product_slug?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      affiliate_reward_rules: {
+        Row: {
+          active: boolean
+          click_points: number
+          created_at: string
+          id: string
+          max_daily_points: number | null
+          notes: string | null
+          product_slug: string
+          purchase_points: number
+          referral_cap: number | null
+          revenue_share_bps: number
+          signup_points: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          click_points?: number
+          created_at?: string
+          id?: string
+          max_daily_points?: number | null
+          notes?: string | null
+          product_slug: string
+          purchase_points?: number
+          referral_cap?: number | null
+          revenue_share_bps?: number
+          signup_points?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          click_points?: number
+          created_at?: string
+          id?: string
+          max_daily_points?: number | null
+          notes?: string | null
+          product_slug?: string
+          purchase_points?: number
+          referral_cap?: number | null
+          revenue_share_bps?: number
+          signup_points?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      affiliate_wallets: {
+        Row: {
+          balance_cash_cents: number
+          balance_points: number
+          lifetime_points: number
+          pending_points: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance_cash_cents?: number
+          balance_points?: number
+          lifetime_points?: number
+          pending_points?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance_cash_cents?: number
+          balance_points?: number
+          lifetime_points?: number
+          pending_points?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       corporate_topup_inquiries: {
         Row: {
           assigned_to: string | null
@@ -83,6 +323,68 @@ export type Database = {
         }
         Relationships: []
       }
+      loyalty_exchange_rates: {
+        Row: {
+          active: boolean
+          created_at: string
+          ends_at: string | null
+          id: string
+          kind: Database["public"]["Enums"]["loyalty_rate_kind"]
+          label: string | null
+          points: number
+          starts_at: string
+          updated_at: string
+          value_amount: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          kind: Database["public"]["Enums"]["loyalty_rate_kind"]
+          label?: string | null
+          points: number
+          starts_at?: string
+          updated_at?: string
+          value_amount: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          kind?: Database["public"]["Enums"]["loyalty_rate_kind"]
+          label?: string | null
+          points?: number
+          starts_at?: string
+          updated_at?: string
+          value_amount?: number
+        }
+        Relationships: []
+      }
+      promotion_products: {
+        Row: {
+          product_slug: string
+          promotion_id: string
+        }
+        Insert: {
+          product_slug: string
+          promotion_id: string
+        }
+        Update: {
+          product_slug?: string
+          promotion_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promotion_products_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_promotions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       role_requests: {
         Row: {
           created_at: string
@@ -143,11 +445,168 @@ export type Database = {
         }
         Relationships: []
       }
+      wallet_ledger: {
+        Row: {
+          cash_delta_cents: number
+          created_at: string
+          id: string
+          kind: Database["public"]["Enums"]["ledger_kind"]
+          note: string | null
+          points_delta: number
+          ref_event_id: string | null
+          ref_withdrawal_id: string | null
+          user_id: string
+        }
+        Insert: {
+          cash_delta_cents?: number
+          created_at?: string
+          id?: string
+          kind: Database["public"]["Enums"]["ledger_kind"]
+          note?: string | null
+          points_delta?: number
+          ref_event_id?: string | null
+          ref_withdrawal_id?: string | null
+          user_id: string
+        }
+        Update: {
+          cash_delta_cents?: number
+          created_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["ledger_kind"]
+          note?: string | null
+          points_delta?: number
+          ref_event_id?: string | null
+          ref_withdrawal_id?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      withdrawal_requests: {
+        Row: {
+          amount_points: number
+          amount_value: number
+          created_at: string
+          destination: string | null
+          id: string
+          method: Database["public"]["Enums"]["withdrawal_method"]
+          payout_ref: string | null
+          reviewed_at: string | null
+          reviewer_id: string | null
+          reviewer_notes: string | null
+          status: Database["public"]["Enums"]["withdrawal_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_points: number
+          amount_value: number
+          created_at?: string
+          destination?: string | null
+          id?: string
+          method: Database["public"]["Enums"]["withdrawal_method"]
+          payout_ref?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          reviewer_notes?: string | null
+          status?: Database["public"]["Enums"]["withdrawal_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_points?: number
+          amount_value?: number
+          created_at?: string
+          destination?: string | null
+          id?: string
+          method?: Database["public"]["Enums"]["withdrawal_method"]
+          payout_ref?: string | null
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          reviewer_notes?: string | null
+          status?: Database["public"]["Enums"]["withdrawal_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      withdrawal_rules: {
+        Row: {
+          auto_approve: boolean
+          cooldown_minutes: number
+          daily_limit_points: number
+          id: number
+          min_points: number
+          updated_at: string
+        }
+        Insert: {
+          auto_approve?: boolean
+          cooldown_minutes?: number
+          daily_limit_points?: number
+          id?: number
+          min_points?: number
+          updated_at?: string
+        }
+        Update: {
+          auto_approve?: boolean
+          cooldown_minutes?: number
+          daily_limit_points?: number
+          id?: number
+          min_points?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      affiliate_approve_withdrawal: {
+        Args: { _id: string; _payout_ref: string }
+        Returns: undefined
+      }
+      affiliate_leaderboard_weekly: {
+        Args: never
+        Returns: {
+          clicks: number
+          points: number
+          purchases: number
+          revenue_cents: number
+          signups: number
+          user_id: string
+        }[]
+      }
+      affiliate_reject_withdrawal: {
+        Args: { _id: string; _reason: string }
+        Returns: undefined
+      }
+      affiliate_request_withdrawal: {
+        Args: {
+          _amount_points: number
+          _destination?: string
+          _method: Database["public"]["Enums"]["withdrawal_method"]
+        }
+        Returns: string
+      }
+      affiliate_track_event: {
+        Args: {
+          _code: string
+          _ip_hash: string
+          _kind: Database["public"]["Enums"]["affiliate_event_kind"]
+          _product_slug: string
+          _revenue_cents?: number
+          _ua_hash: string
+        }
+        Returns: string
+      }
+      get_active_loyalty_rate: {
+        Args: { _kind: Database["public"]["Enums"]["loyalty_rate_kind"] }
+        Returns: {
+          label: string
+          points: number
+          value_amount: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -157,10 +616,15 @@ export type Database = {
       }
     }
     Enums: {
+      affiliate_event_kind: "click" | "signup" | "purchase"
       app_role: "admin" | "staff" | "user" | "developer" | "affiliate"
       inquiry_status: "new" | "contacted" | "qualified" | "rejected"
+      ledger_kind: "earn" | "redeem" | "payout" | "adjust" | "refund"
+      loyalty_rate_kind: "cash" | "airtime" | "data"
       preferred_contact: "Email" | "Phone call" | "WhatsApp"
       role_request_status: "pending" | "approved" | "rejected"
+      withdrawal_method: "mpesa" | "airtime" | "data"
+      withdrawal_status: "pending" | "approved" | "rejected" | "paid" | "failed"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -288,10 +752,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      affiliate_event_kind: ["click", "signup", "purchase"],
       app_role: ["admin", "staff", "user", "developer", "affiliate"],
       inquiry_status: ["new", "contacted", "qualified", "rejected"],
+      ledger_kind: ["earn", "redeem", "payout", "adjust", "refund"],
+      loyalty_rate_kind: ["cash", "airtime", "data"],
       preferred_contact: ["Email", "Phone call", "WhatsApp"],
       role_request_status: ["pending", "approved", "rejected"],
+      withdrawal_method: ["mpesa", "airtime", "data"],
+      withdrawal_status: ["pending", "approved", "rejected", "paid", "failed"],
     },
   },
 } as const
