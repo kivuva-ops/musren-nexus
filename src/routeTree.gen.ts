@@ -16,9 +16,11 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AffiliatesRouteImport } from './routes/affiliates'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSlugRouteImport } from './routes/solutions/$slug'
+import { Route as AuthenticatedAdminCorporateTopupRouteImport } from './routes/_authenticated/admin.corporate-topup'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -55,6 +57,10 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -70,6 +76,12 @@ const SolutionsSlugRoute = SolutionsSlugRouteImport.update({
   path: '/solutions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminCorporateTopupRoute =
+  AuthenticatedAdminCorporateTopupRouteImport.update({
+    id: '/admin/corporate-topup',
+    path: '/admin/corporate-topup',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
+  '/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -94,10 +107,12 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions': typeof SolutionsIndexRoute
+  '/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/about': typeof AboutRoute
   '/affiliates': typeof AffiliatesRoute
   '/blog': typeof BlogRoute
@@ -107,6 +122,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
+  '/_authenticated/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,6 +137,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/solutions/$slug'
     | '/solutions/'
+    | '/admin/corporate-topup'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,9 +150,11 @@ export interface FileRouteTypes {
     | '/login'
     | '/solutions/$slug'
     | '/solutions'
+    | '/admin/corporate-topup'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/about'
     | '/affiliates'
     | '/blog'
@@ -145,10 +164,12 @@ export interface FileRouteTypes {
     | '/login'
     | '/solutions/$slug'
     | '/solutions/'
+    | '/_authenticated/admin/corporate-topup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AboutRoute: typeof AboutRoute
   AffiliatesRoute: typeof AffiliatesRoute
   BlogRoute: typeof BlogRoute
@@ -211,6 +232,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -232,11 +260,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolutionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/corporate-topup': {
+      id: '/_authenticated/admin/corporate-topup'
+      path: '/admin/corporate-topup'
+      fullPath: '/admin/corporate-topup'
+      preLoaderRoute: typeof AuthenticatedAdminCorporateTopupRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedAdminCorporateTopupRoute: typeof AuthenticatedAdminCorporateTopupRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminCorporateTopupRoute: AuthenticatedAdminCorporateTopupRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AboutRoute: AboutRoute,
   AffiliatesRoute: AffiliatesRoute,
   BlogRoute: BlogRoute,
@@ -250,3 +298,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
