@@ -15,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { Check, Wallet } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const useCases = [
   "Staff airtime allowances",
