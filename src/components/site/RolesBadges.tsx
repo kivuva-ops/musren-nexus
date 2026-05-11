@@ -8,6 +8,8 @@ const roleStyles: Record<AppRole, string> = {
   staff: "bg-accent/15 text-accent border-accent/30",
   developer: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
   affiliate: "bg-amber-500/15 text-amber-400 border-amber-500/30",
+  customer: "bg-primary/10 text-primary border-primary/25",
+  merchant: "bg-cyan/15 text-cyan border-cyan/30",
   user: "bg-muted text-muted-foreground border-border",
 };
 

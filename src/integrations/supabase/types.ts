@@ -425,6 +425,42 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          auth_verified: boolean
+          created_at: string
+          email: string
+          id: string
+          onboarding_completed: boolean
+          role: Database["public"]["Enums"]["profile_role"] | null
+          role_selected: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          auth_verified?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          onboarding_completed?: boolean
+          role?: Database["public"]["Enums"]["profile_role"] | null
+          role_selected?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          auth_verified?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          onboarding_completed?: boolean
+          role?: Database["public"]["Enums"]["profile_role"] | null
+          role_selected?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       promotion_products: {
         Row: {
           product_slug: string
@@ -708,6 +744,49 @@ export type Database = {
         Returns: string
       }
       claim_first_superadmin: { Args: never; Returns: boolean }
+      complete_onboarding: {
+        Args: {
+          _email?: string
+          _role: Database["public"]["Enums"]["profile_role"]
+        }
+        Returns: {
+          auth_verified: boolean
+          created_at: string
+          email: string
+          id: string
+          onboarding_completed: boolean
+          role: Database["public"]["Enums"]["profile_role"] | null
+          role_selected: boolean
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      ensure_user_profile: {
+        Args: { _email?: string }
+        Returns: {
+          auth_verified: boolean
+          created_at: string
+          email: string
+          id: string
+          onboarding_completed: boolean
+          role: Database["public"]["Enums"]["profile_role"] | null
+          role_selected: boolean
+          updated_at: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       get_active_loyalty_rate: {
         Args: { _kind: Database["public"]["Enums"]["loyalty_rate_kind"] }
         Returns: {
@@ -759,6 +838,8 @@ export type Database = {
         | "developer"
         | "affiliate"
         | "superadmin"
+        | "customer"
+        | "merchant"
       consent_category:
         | "necessary"
         | "analytics"
@@ -769,6 +850,7 @@ export type Database = {
       ledger_kind: "earn" | "redeem" | "payout" | "adjust" | "refund"
       loyalty_rate_kind: "cash" | "airtime" | "data"
       preferred_contact: "Email" | "Phone call" | "WhatsApp"
+      profile_role: "customer" | "affiliate" | "merchant" | "developer"
       role_request_status: "pending" | "approved" | "rejected"
       withdrawal_method: "mpesa" | "airtime" | "data"
       withdrawal_status: "pending" | "approved" | "rejected" | "paid" | "failed"
@@ -907,6 +989,8 @@ export const Constants = {
         "developer",
         "affiliate",
         "superadmin",
+        "customer",
+        "merchant",
       ],
       consent_category: [
         "necessary",
@@ -919,6 +1003,7 @@ export const Constants = {
       ledger_kind: ["earn", "redeem", "payout", "adjust", "refund"],
       loyalty_rate_kind: ["cash", "airtime", "data"],
       preferred_contact: ["Email", "Phone call", "WhatsApp"],
+      profile_role: ["customer", "affiliate", "merchant", "developer"],
       role_request_status: ["pending", "approved", "rejected"],
       withdrawal_method: ["mpesa", "airtime", "data"],
       withdrawal_status: ["pending", "approved", "rejected", "paid", "failed"],

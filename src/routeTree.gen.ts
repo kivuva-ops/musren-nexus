@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SelectRoleRouteImport } from './routes/select-role'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyCenterRouteImport } from './routes/privacy-center'
 import { Route as LoginRouteImport } from './routes/login'
@@ -23,6 +24,8 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSlugRouteImport } from './routes/solutions/$slug'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDevelopersDashboardRouteImport } from './routes/_authenticated/developers.dashboard'
 import { Route as AuthenticatedAffiliatesDashboardRouteImport } from './routes/_authenticated/affiliates.dashboard'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
@@ -32,6 +35,11 @@ import { Route as AuthenticatedAdminConsentRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminAffiliatesRouteImport } from './routes/_authenticated/admin.affiliates'
 import { Route as ApiPublicRCodeRouteImport } from './routes/api/public/r.$code'
 
+const SelectRoleRoute = SelectRoleRouteImport.update({
+  id: '/select-role',
+  path: '/select-role',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -101,6 +109,16 @@ const SolutionsSlugRoute = SolutionsSlugRouteImport.update({
   path: '/solutions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDevelopersDashboardRoute =
   AuthenticatedDevelopersDashboardRouteImport.update({
     id: '/developers/dashboard',
@@ -160,6 +178,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/select-role': typeof SelectRoleRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -183,6 +204,9 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/select-role': typeof SelectRoleRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions': typeof SolutionsIndexRoute
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -208,6 +232,9 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/select-role': typeof SelectRoleRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/_authenticated/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -233,6 +260,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy-center'
     | '/reset-password'
+    | '/select-role'
+    | '/dashboard'
+    | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions/'
     | '/admin/affiliates'
@@ -256,6 +286,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy-center'
     | '/reset-password'
+    | '/select-role'
+    | '/dashboard'
+    | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions'
     | '/admin/affiliates'
@@ -280,6 +313,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy-center'
     | '/reset-password'
+    | '/select-role'
+    | '/_authenticated/dashboard'
+    | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions/'
     | '/_authenticated/admin/affiliates'
@@ -305,6 +341,8 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PrivacyCenterRoute: typeof PrivacyCenterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SelectRoleRoute: typeof SelectRoleRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   SolutionsSlugRoute: typeof SolutionsSlugRoute
   SolutionsIndexRoute: typeof SolutionsIndexRoute
   ApiPublicRCodeRoute: typeof ApiPublicRCodeRoute
@@ -312,6 +350,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/select-role': {
+      id: '/select-role'
+      path: '/select-role'
+      fullPath: '/select-role'
+      preLoaderRoute: typeof SelectRoleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
@@ -410,6 +455,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolutionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/developers/dashboard': {
       id: '/_authenticated/developers/dashboard'
       path: '/developers/dashboard'
@@ -470,6 +529,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedAdminAffiliatesRoute: typeof AuthenticatedAdminAffiliatesRoute
   AuthenticatedAdminConsentRoute: typeof AuthenticatedAdminConsentRoute
   AuthenticatedAdminCorporateTopupRoute: typeof AuthenticatedAdminCorporateTopupRoute
@@ -480,6 +540,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedAdminAffiliatesRoute: AuthenticatedAdminAffiliatesRoute,
   AuthenticatedAdminConsentRoute: AuthenticatedAdminConsentRoute,
   AuthenticatedAdminCorporateTopupRoute: AuthenticatedAdminCorporateTopupRoute,
@@ -506,6 +567,8 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PrivacyCenterRoute: PrivacyCenterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SelectRoleRoute: SelectRoleRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   SolutionsSlugRoute: SolutionsSlugRoute,
   SolutionsIndexRoute: SolutionsIndexRoute,
   ApiPublicRCodeRoute: ApiPublicRCodeRoute,
