@@ -9,7 +9,6 @@ const links = [
   { to: "/industries", label: "Industries" },
   { to: "/developers", label: "Developers" },
   { to: "/affiliates", label: "Affiliates" },
-  { to: "/events", label: "Trainings & Events" },
   { to: "/blog", label: "Blogs & News" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },

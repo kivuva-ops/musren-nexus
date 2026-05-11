@@ -1,4 +1,4 @@
-import { MessageSquare, Hash, Phone, MessageCircle, ClipboardList, Gift, Cable, Server } from "lucide-react";
+import { MessageSquare, Hash, Phone, MessageCircle, ClipboardList, Gift, Cable, Server, Wallet } from "lucide-react";
 
 export const products = [
   {
@@ -70,6 +70,16 @@ export const products = [
     features: ["REST + Webhooks", "SDKs", "Sandbox keys", "Rate-limited & scalable"],
     useCases: ["Mobile apps", "ERPs", "Fintech rails"],
     benefits: ["Faster time-to-market", "Single contract", "Predictable cost"],
+  },
+  {
+    slug: "corporate-topup",
+    icon: Wallet,
+    name: "Corporate Topup",
+    tagline: "Bulk airtime & data, instantly",
+    description: "Send airtime, bundles and data to staff, agents or customers across all networks from one dashboard or API.",
+    features: ["Multi-network airtime", "Data bundles", "Bulk uploads", "Scheduled disbursement", "API & webhooks", "Approval workflows"],
+    useCases: ["Staff allowances", "Agent commissions", "Customer rewards", "Field team enablement", "Promotional giveaways"],
+    benefits: ["Single invoice", "Real-time delivery", "Audit-ready reports", "Lower operational cost"],
   },
   {
     slug: "enterprise-messaging",
