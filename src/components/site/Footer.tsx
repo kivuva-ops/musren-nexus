@@ -34,7 +34,7 @@ export function Footer() {
 
   return (
     <footer className="mt-32 border-t border-border">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-10 sm:py-12">
+      <div className="container-page section-y">
         <div className="grid gap-8 sm:gap-10 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2">
