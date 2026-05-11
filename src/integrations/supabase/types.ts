@@ -927,6 +927,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      has_superadmin: { Args: never; Returns: boolean }
       list_users_with_roles: {
         Args: never
         Returns: {

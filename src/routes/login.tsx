@@ -10,7 +10,7 @@ import { Zap, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/use-auth";
-import { dashboardForAccess, fetchUserProfile, isOnboardingComplete } from "@/lib/onboarding";
+import { resolvePostAuthRedirect } from "@/lib/onboarding";
 import { toast } from "sonner";
 
 const searchSchema = z.object({ redirect: z.string().optional() });
@@ -62,20 +62,23 @@ function LoginPage() {
   useEffect(() => {
     if (!loading && isAuthenticated && user) {
       const routeAfterLogin = async () => {
-        const profile = await fetchUserProfile(user.id);
-        if (!isOnboardingComplete(profile)) {
-          navigate({ to: "/select-role", replace: true });
+        const { target } = await resolvePostAuthRedirect(user);
+        const safeRedirect = search.redirect?.startsWith("/admin") || search.redirect === "/select-role"
+          ? undefined
+          : search.redirect;
+        console.info("[auth] redirect target", safeRedirect ?? target);
+        if (target === "/select-role" || target.startsWith("/admin")) {
+          navigate({ to: target as "/dashboard", replace: true });
           return;
         }
-        const target = search.redirect ?? dashboardForAccess(profile, roles);
-        navigate({ to: target as "/dashboard", replace: true });
+        navigate({ to: (safeRedirect ?? target) as "/dashboard", replace: true });
       };
       routeAfterLogin().catch((err) => {
         console.error("[auth] post-login routing error:", err);
         navigate({ to: "/select-role", replace: true });
       });
     }
-  }, [loading, isAuthenticated, navigate, roles, search.redirect, user]);
+  }, [loading, isAuthenticated, navigate, search.redirect, user]);
 
   const friendlyEmailError = (raw: string, mode: "signin" | "signup") => {
     const m = raw.toLowerCase();
@@ -164,6 +167,7 @@ function LoginPage() {
           options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
         });
         if (error) throw error;
+        console.info("[auth] verification email requested", { email });
         toast.success("Account created. Check your email to confirm.");
       }
     } catch (err) {

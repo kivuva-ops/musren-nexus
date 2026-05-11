@@ -29,11 +29,20 @@ export const dashboardForRole = (role?: ProfileRole | null) => {
 };
 
 export const dashboardForAccess = (profile?: UserProfile | null, roles: string[] = []) => {
-  if (roles.some((role) => role === "admin" || role === "staff" || role === "superadmin")) {
-    return "/admin/corporate-topup";
+  if (roles.includes("superadmin")) {
+    return "/admin/users";
+  }
+  if (roles.some((role) => role === "admin" || role === "staff")) {
+    return "/admin/dashboard";
   }
   return dashboardForRole(profile?.role);
 };
+
+export async function getUserRoles(userId: string) {
+  const { data, error } = await supabase.from("user_roles").select("role").eq("user_id", userId);
+  if (error) throw error;
+  return (data ?? []).map((row) => row.role as string);
+}
 
 export async function fetchUserProfile(userId: string) {
   const { data, error } = await (supabase as any)
@@ -65,5 +74,22 @@ export async function completeUserOnboarding(user: User, role: ProfileRole) {
   return data as UserProfile;
 }
 
-export const isOnboardingComplete = (profile?: UserProfile | null) =>
-  !!profile?.role_selected && !!profile?.onboarding_completed && !!profile?.role;
+export const isRoleAssigned = (profile?: UserProfile | null) => !!profile?.role;
+
+export const isOnboardingComplete = isRoleAssigned;
+
+export async function resolvePostAuthRedirect(user: User) {
+  console.info("[auth] session created", { userId: user.id, email: user.email });
+
+  const roles = await getUserRoles(user.id);
+  const privilegedTarget = dashboardForAccess(null, roles);
+  if (privilegedTarget.startsWith("/admin")) {
+    console.info("[auth] role detected", { roles, redirectTarget: privilegedTarget });
+    return { profile: null, roles, target: privilegedTarget };
+  }
+
+  const profile = await ensureUserProfile(user);
+  const target = isRoleAssigned(profile) ? dashboardForRole(profile.role) : "/select-role";
+  console.info("[auth] role detected", { role: profile?.role ?? null, roles, redirectTarget: target });
+  return { profile, roles, target };
+}
