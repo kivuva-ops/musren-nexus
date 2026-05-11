@@ -77,17 +77,6 @@ function Home() {
         </div>
       </section>
 
-      {/* TRUST */}
-      <section className="border-y border-border">
-        <div className="mx-auto max-w-7xl px-4 py-10 flex flex-wrap items-center justify-between gap-6">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">Trusted by leading African enterprises</p>
-          <div className="flex flex-wrap gap-x-10 gap-y-3 text-muted-foreground/60 font-display font-semibold text-sm tracking-wider">
-            {["SACCO Africa", "PesaLink", "AgriCorp", "MediFirst", "EduConnect", "RetailHub"].map((b) => (
-              <span key={b}>{b}</span>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* SOLUTIONS */}
       <Section
