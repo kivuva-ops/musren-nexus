@@ -122,8 +122,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
-        <Toaster />
+        <ConsentProvider>
+          <Outlet />
+          <ConsentBanner />
+          <Toaster />
+        </ConsentProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
