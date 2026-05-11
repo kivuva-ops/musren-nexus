@@ -254,6 +254,39 @@ export type Database = {
         }
         Relationships: []
       }
+      consent_policies: {
+        Row: {
+          active: boolean
+          content_url: string | null
+          created_at: string
+          effective_at: string
+          id: string
+          kind: Database["public"]["Enums"]["consent_policy_kind"]
+          summary: string | null
+          version: string
+        }
+        Insert: {
+          active?: boolean
+          content_url?: string | null
+          created_at?: string
+          effective_at?: string
+          id?: string
+          kind: Database["public"]["Enums"]["consent_policy_kind"]
+          summary?: string | null
+          version: string
+        }
+        Update: {
+          active?: boolean
+          content_url?: string | null
+          created_at?: string
+          effective_at?: string
+          id?: string
+          kind?: Database["public"]["Enums"]["consent_policy_kind"]
+          summary?: string | null
+          version?: string
+        }
+        Relationships: []
+      }
       corporate_topup_inquiries: {
         Row: {
           assigned_to: string | null
@@ -424,6 +457,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_consents: {
+        Row: {
+          category: Database["public"]["Enums"]["consent_category"]
+          created_at: string
+          granted: boolean
+          id: string
+          ip_hash: string | null
+          policy_version: string
+          source: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["consent_category"]
+          created_at?: string
+          granted: boolean
+          id?: string
+          ip_hash?: string | null
+          policy_version: string
+          source?: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["consent_category"]
+          created_at?: string
+          granted?: boolean
+          id?: string
+          ip_hash?: string | null
+          policy_version?: string
+          source?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -558,7 +627,16 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      current_user_consents: {
+        Row: {
+          category: Database["public"]["Enums"]["consent_category"] | null
+          created_at: string | null
+          granted: boolean | null
+          policy_version: string | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       affiliate_approve_withdrawal: {
@@ -614,10 +692,20 @@ export type Database = {
         }
         Returns: boolean
       }
+      record_user_consents: {
+        Args: { _items: Json; _policy_version: string; _source?: string }
+        Returns: undefined
+      }
     }
     Enums: {
       affiliate_event_kind: "click" | "signup" | "purchase"
       app_role: "admin" | "staff" | "user" | "developer" | "affiliate"
+      consent_category:
+        | "necessary"
+        | "analytics"
+        | "marketing"
+        | "personalization"
+      consent_policy_kind: "privacy" | "terms" | "cookies"
       inquiry_status: "new" | "contacted" | "qualified" | "rejected"
       ledger_kind: "earn" | "redeem" | "payout" | "adjust" | "refund"
       loyalty_rate_kind: "cash" | "airtime" | "data"
@@ -754,6 +842,13 @@ export const Constants = {
     Enums: {
       affiliate_event_kind: ["click", "signup", "purchase"],
       app_role: ["admin", "staff", "user", "developer", "affiliate"],
+      consent_category: [
+        "necessary",
+        "analytics",
+        "marketing",
+        "personalization",
+      ],
+      consent_policy_kind: ["privacy", "terms", "cookies"],
       inquiry_status: ["new", "contacted", "qualified", "rejected"],
       ledger_kind: ["earn", "redeem", "payout", "adjust", "refund"],
       loyalty_rate_kind: ["cash", "airtime", "data"],
