@@ -227,6 +227,11 @@ function LoginPage() {
                 <div>
                   <Label htmlFor="password2">Password</Label>
                   <Input id="password2" name="password" type="password" required minLength={8} maxLength={72} className="mt-1.5 glass" />
+                  <p className="mt-1 text-xs text-muted-foreground">At least 8 characters.</p>
+                </div>
+                <div>
+                  <Label htmlFor="confirmPassword">Confirm password</Label>
+                  <Input id="confirmPassword" name="confirmPassword" type="password" required minLength={8} maxLength={72} className="mt-1.5 glass" />
                 </div>
                 <Button
                   type="submit"
