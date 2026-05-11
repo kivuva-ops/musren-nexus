@@ -34,8 +34,8 @@ export function Footer() {
 
   return (
     <footer className="mt-32 border-t border-border">
-      <div className="mx-auto max-w-7xl px-4 py-16">
-        <div className="grid gap-12 lg:grid-cols-5">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-10 sm:py-12">
+        <div className="grid gap-8 sm:gap-10 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Link to="/" className="flex items-center gap-2">
               <div className="size-8 rounded-lg bg-gradient-to-br from-primary to-accent grid place-items-center">
@@ -63,7 +63,7 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row justify-between gap-4 text-xs text-muted-foreground">
+        <div className="mt-8 pt-6 border-t border-border flex flex-col sm:flex-row justify-between gap-4 text-xs text-muted-foreground">
           <p>© {new Date().getFullYear()} Musren. All rights reserved.</p>
           <p>Built for African telecom innovation.</p>
         </div>

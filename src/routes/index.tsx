@@ -32,7 +32,7 @@ function Home() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/60 via-background/85 to-background" aria-hidden />
         <div className="absolute inset-0 -z-10 grid-bg opacity-30" aria-hidden />
 
-        <div className="mx-auto max-w-[1400px] px-6 lg:px-10 pt-16 pb-20 sm:pt-20 sm:pb-24 w-full">
+        <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-10 pt-10 pb-14 sm:pt-16 sm:pb-20 w-full">
           <div className="mx-auto text-center max-w-5xl">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm font-semibold text-primary border border-primary/30 shadow-[0_0_30px_-8px_var(--primary)]">
               <Sparkles className="size-4" /> Trusted for 6+ years powering African enterprises
@@ -60,7 +60,7 @@ function Home() {
               </Link>
             </div>
 
-            <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div className="mt-10 sm:mt-12 grid grid-cols-2 sm:grid-cols-4 gap-5 sm:gap-6 max-w-4xl mx-auto">
               {[
                 ["6+", "Years experience"],
                 ["10M+", "Messages / month"],

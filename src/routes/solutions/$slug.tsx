@@ -59,7 +59,7 @@ function SolutionDetail() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 grid-bg opacity-30" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-        <div className="mx-auto max-w-7xl px-4 py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-10 sm:py-14">
           <Link to="/solutions" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5">
             ← All solutions
           </Link>
