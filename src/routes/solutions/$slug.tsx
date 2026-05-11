@@ -11,10 +11,10 @@ export const Route = createFileRoute("/solutions/$slug")({
   loader: ({ params }) => {
     const product = getProduct(params.slug);
     if (!product) throw notFound();
-    return { product };
+    return { slug: params.slug };
   },
   head: ({ loaderData }) => {
-    const p = loaderData?.product;
+    const p = loaderData ? getProduct(loaderData.slug) : undefined;
     return {
       meta: p
         ? [
@@ -44,7 +44,13 @@ export const Route = createFileRoute("/solutions/$slug")({
 });
 
 function SolutionDetail() {
-  const { product } = Route.useLoaderData();
+  const { slug } = Route.useLoaderData();
+  const product = getProduct(slug);
+
+  if (!product) {
+    throw notFound();
+  }
+
   const Icon = product.icon;
   const others = products.filter((p) => p.slug !== product.slug).slice(0, 3);
 
