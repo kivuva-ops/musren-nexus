@@ -32,7 +32,7 @@ function Home() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/60 via-background/85 to-background" aria-hidden />
         <div className="absolute inset-0 -z-10 grid-bg opacity-30" aria-hidden />
 
-        <div className="mx-auto max-w-[1400px] px-6 lg:px-10 pt-20 pb-32 sm:pt-28 sm:pb-40 w-full">
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10 pt-16 pb-20 sm:pt-20 sm:pb-24 w-full">
           <div className="mx-auto text-center max-w-5xl">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm font-semibold text-primary border border-primary/30 shadow-[0_0_30px_-8px_var(--primary)]">
               <Sparkles className="size-4" /> Trusted for 6+ years powering African enterprises
