@@ -10,7 +10,7 @@ export function Section({
   eyebrow?: string;
   title?: ReactNode;
   description?: string;
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
 }) {
   return (
