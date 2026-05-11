@@ -11,6 +11,8 @@ import {
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
+import { ConsentProvider } from "@/hooks/use-consent";
+import { ConsentBanner } from "@/components/site/ConsentBanner";
 
 function NotFoundComponent() {
   return (
