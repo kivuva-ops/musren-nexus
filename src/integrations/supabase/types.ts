@@ -287,6 +287,36 @@ export type Database = {
         }
         Relationships: []
       }
+      consent_settings: {
+        Row: {
+          active_policy_version: string
+          default_analytics: boolean
+          default_marketing: boolean
+          default_personalization: boolean
+          id: number
+          reprompt_on_version_change: boolean
+          updated_at: string
+        }
+        Insert: {
+          active_policy_version?: string
+          default_analytics?: boolean
+          default_marketing?: boolean
+          default_personalization?: boolean
+          id?: number
+          reprompt_on_version_change?: boolean
+          updated_at?: string
+        }
+        Update: {
+          active_policy_version?: string
+          default_analytics?: boolean
+          default_marketing?: boolean
+          default_personalization?: boolean
+          id?: number
+          reprompt_on_version_change?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       corporate_topup_inquiries: {
         Row: {
           assigned_to: string | null
