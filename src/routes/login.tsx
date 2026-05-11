@@ -10,6 +10,7 @@ import { Zap, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/use-auth";
+import { dashboardForAccess, fetchUserProfile, isOnboardingComplete } from "@/lib/onboarding";
 import { toast } from "sonner";
 
 const searchSchema = z.object({ redirect: z.string().optional() });
@@ -38,7 +39,7 @@ const signupSchema = credSchema.extend({
 });
 
 function LoginPage() {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, user, roles } = useAuth();
   const search = Route.useSearch();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
@@ -59,11 +60,22 @@ function LoginPage() {
   );
 
   useEffect(() => {
-    if (!loading && isAuthenticated) {
-      const target = search.redirect ?? "/admin/corporate-topup";
-      navigate({ to: target as "/admin/corporate-topup" });
+    if (!loading && isAuthenticated && user) {
+      const routeAfterLogin = async () => {
+        const profile = await fetchUserProfile(user.id);
+        if (!isOnboardingComplete(profile)) {
+          navigate({ to: "/select-role", replace: true });
+          return;
+        }
+        const target = search.redirect ?? dashboardForAccess(profile, roles);
+        navigate({ to: target as "/dashboard", replace: true });
+      };
+      routeAfterLogin().catch((err) => {
+        console.error("[auth] post-login routing error:", err);
+        navigate({ to: "/select-role", replace: true });
+      });
     }
-  }, [loading, isAuthenticated, navigate, search.redirect]);
+  }, [loading, isAuthenticated, navigate, roles, search.redirect, user]);
 
   const friendlyEmailError = (raw: string, mode: "signin" | "signup") => {
     const m = raw.toLowerCase();
@@ -102,7 +114,7 @@ function LoginPage() {
     setBusy(true);
     try {
       const res = await lovable.auth.signInWithOAuth(provider, {
-        redirect_uri: window.location.origin,
+        redirect_uri: `${window.location.origin}/auth/callback`,
       });
       if (res.error) {
         console.error(`[auth] ${provider} OAuth error:`, res.error);
@@ -149,7 +161,7 @@ function LoginPage() {
       } else {
         const { error } = await supabase.auth.signUp({
           email, password,
-          options: { emailRedirectTo: `${window.location.origin}/login` },
+          options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
         });
         if (error) throw error;
         toast.success("Account created. Check your email to confirm.");
