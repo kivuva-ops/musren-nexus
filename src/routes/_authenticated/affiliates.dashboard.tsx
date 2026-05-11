@@ -54,6 +54,7 @@ function AffiliateDashboard() {
         title={<>Welcome back, <span className="text-gradient">{user?.email?.split("@")[0]}</span></>}
         description="Your affiliate workspace — referrals, performance and rewards."
       >
+        <div className="mb-6"><RolesBadges /></div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {cards.map((c) => (
             <div key={c.title} className="glass rounded-2xl p-6">
