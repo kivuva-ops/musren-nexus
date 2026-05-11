@@ -34,7 +34,7 @@ export function Navbar() {
         scrolled ? "py-2" : "py-4"
       }`}
     >
-      <div className="mx-auto max-w-7xl px-4">
+      <div className="container-page">
         <div
           className={`flex items-center justify-between rounded-2xl px-4 py-2.5 transition-all ${
             scrolled ? "glass-strong shadow-elegant" : "glass"
