@@ -29,6 +29,7 @@ function DeveloperDashboard() {
           description="Your account doesn't have developer access yet. Request access and our team will enable it."
         >
           <div className="space-y-5">
+            <RolesBadges highlightMissing="developer" />
             <RequestRoleAccess role="developer" />
             <div className="flex flex-wrap gap-3">
               <Link to="/developers">
