@@ -151,11 +151,9 @@ function LoginPage() {
             <Button
               type="button"
               variant="outline"
+              disabled={busy}
               className="w-full glass"
-              onClick={async () => {
-                const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-                if (res.error) toast.error(res.error.message);
-              }}
+              onClick={() => handleOAuth("google")}
             >
               <svg className="size-4" viewBox="0 0 24 24" aria-hidden><path fill="#EA4335" d="M12 11v3.2h4.5c-.2 1.2-1.4 3.5-4.5 3.5-2.7 0-4.9-2.2-4.9-5s2.2-5 4.9-5c1.5 0 2.6.7 3.2 1.2l2.2-2.1C15.9 5.5 14.1 4.7 12 4.7 7.9 4.7 4.6 8 4.6 12s3.3 7.3 7.4 7.3c4.3 0 7.1-3 7.1-7.2 0-.5-.1-.9-.1-1.1H12z"/></svg>
               Continue with Google
@@ -163,11 +161,9 @@ function LoginPage() {
             <Button
               type="button"
               variant="outline"
+              disabled={busy}
               className="w-full glass"
-              onClick={async () => {
-                const res = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin });
-                if (res.error) toast.error(res.error.message);
-              }}
+              onClick={() => handleOAuth("apple")}
             >
               <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.9-1.5-.1-2.8.9-3.6.9-.7 0-1.9-.8-3.1-.8-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.2 1.7 2.5 3 2.5 1.2 0 1.7-.8 3.1-.8s1.9.8 3.1.8 2.2-1.2 3-2.4c.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.7-1-2.7-4zM14.2 5.5c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1.1.1 2.1-.5 2.7-1.3z"/></svg>
               Continue with Apple
