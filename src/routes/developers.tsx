@@ -23,8 +23,8 @@ export const Route = createFileRoute("/developers")({
         "Technical forums and developer events.",
         "Status page and SLAs you can trust.",
       ]}
-      ctaHref="/login"
-      ctaLabel="Developer login"
+      ctaHref="/developers/dashboard"
+      ctaLabel="Open developer dashboard"
     />
   ),
 });

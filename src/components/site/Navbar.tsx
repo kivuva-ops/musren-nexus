@@ -108,9 +108,19 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
-            <Link to="/login" onClick={() => setOpen(false)} className="px-3 py-2.5 text-sm border-t border-border mt-2 pt-3">
-              Login
-            </Link>
+            {isAuthenticated ? (
+              <button
+                type="button"
+                onClick={() => { setOpen(false); signOut(); }}
+                className="text-left px-3 py-2.5 text-sm border-t border-border mt-2 pt-3 inline-flex items-center gap-2"
+              >
+                <LogOut className="size-4" /> Sign out
+              </button>
+            ) : (
+              <Link to="/login" onClick={() => setOpen(false)} className="px-3 py-2.5 text-sm border-t border-border mt-2 pt-3">
+                Login
+              </Link>
+            )}
           </div>
         )}
       </div>

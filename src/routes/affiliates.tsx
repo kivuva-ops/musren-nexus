@@ -23,8 +23,8 @@ export const Route = createFileRoute("/affiliates")({
         "Join campaigns and brand challenges.",
         "Trainings, forums and partner events.",
       ]}
-      ctaHref="/login"
-      ctaLabel="Become an affiliate"
+      ctaHref="/affiliates/dashboard"
+      ctaLabel="Open affiliate dashboard"
     />
   ),
 });
