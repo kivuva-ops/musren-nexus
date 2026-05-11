@@ -30,6 +30,13 @@ const credSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters").max(72),
 });
 
+const signupSchema = credSchema.extend({
+  confirmPassword: z.string().min(8).max(72),
+}).refine((d) => d.password === d.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
 function LoginPage() {
   const { isAuthenticated, loading } = useAuth();
   const search = Route.useSearch();
