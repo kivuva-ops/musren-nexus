@@ -27,15 +27,13 @@ function AffiliateDashboard() {
           title="Affiliate access required"
           description="Your account isn't enrolled in the affiliate program yet. Apply and our partner team will activate it."
         >
-          <div className="flex flex-wrap gap-3">
-            <Link to="/contact">
-              <Button className="bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold">
-                Apply to become an affiliate
-              </Button>
-            </Link>
-            <Link to="/affiliates">
-              <Button variant="outline" className="glass">Back to overview</Button>
-            </Link>
+          <div className="space-y-5">
+            <RequestRoleAccess role="affiliate" />
+            <div className="flex flex-wrap gap-3">
+              <Link to="/affiliates">
+                <Button variant="outline" className="glass">Back to overview</Button>
+              </Link>
+            </div>
           </div>
         </Section>
       </SiteLayout>
