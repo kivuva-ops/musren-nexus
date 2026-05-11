@@ -10,7 +10,6 @@ import {
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
-import { AuthProvider } from "@/hooks/use-auth";
 
 function NotFoundComponent() {
   return (
@@ -75,13 +74,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { name: "description", content: "Musren Connect is a premium telecom technology and customer engagement platform." },
       { name: "author", content: "Lovable" },
       { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:description", content: "Musren Connect is a premium telecom technology and customer engagement platform." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Lovable App" },
+      { name: "twitter:description", content: "Musren Connect is a premium telecom technology and customer engagement platform." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c4cf8ec5-28cc-4669-a13a-a885eca36269/id-preview-a932d754--ab7a0f98-a3dd-4c48-b26a-03c195018a5e.lovable.app-1778501185359.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c4cf8ec5-28cc-4669-a13a-a885eca36269/id-preview-a932d754--ab7a0f98-a3dd-4c48-b26a-03c195018a5e.lovable.app-1778501185359.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -115,10 +118,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Outlet />
-        <Toaster />
-      </AuthProvider>
+      <Outlet />
+      <Toaster />
     </QueryClientProvider>
   );
 }
