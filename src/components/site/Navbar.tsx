@@ -19,7 +19,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { isAuthenticated, hasAnyRole, signOut } = useAuth();
-  const canAdmin = hasAnyRole(["admin", "staff"]);
+  const canAdmin = hasAnyRole(["admin", "staff", "superadmin"]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);

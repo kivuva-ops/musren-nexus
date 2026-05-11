@@ -5,7 +5,7 @@ import { z } from "zod";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { dashboardForAccess, ensureUserProfile, isOnboardingComplete } from "@/lib/onboarding";
+import { resolvePostAuthRedirect } from "@/lib/onboarding";
 
 const callbackSearchSchema = z.object({
   code: z.string().optional(),
@@ -57,18 +57,9 @@ function AuthCallbackPage() {
         }
 
         setStatus("Session restored. Preparing your workspace…");
-        const profile = await ensureUserProfile(user);
-
-        if (!isOnboardingComplete(profile)) {
-          navigate({ to: "/select-role", replace: true });
-          return;
-        }
-
-        const { data: roleRows } = await supabase.from("user_roles").select("role").eq("user_id", user.id);
-        navigate({
-          to: dashboardForAccess(profile, (roleRows ?? []).map((row) => row.role)) as "/dashboard",
-          replace: true,
-        });
+        const { target } = await resolvePostAuthRedirect(user);
+        console.info("[auth] redirect target", target);
+        navigate({ to: target as "/dashboard", replace: true });
       } catch (err) {
         console.error("[auth] callback error:", err);
         const msg = (err as Error).message?.toLowerCase() ?? "";
