@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SelectRoleRouteImport } from './routes/select-role'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyCenterRouteImport } from './routes/privacy-center'
 import { Route as LoginRouteImport } from './routes/login'
@@ -33,6 +34,11 @@ import { Route as AuthenticatedAdminConsentRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminAffiliatesRouteImport } from './routes/_authenticated/admin.affiliates'
 import { Route as ApiPublicRCodeRouteImport } from './routes/api/public/r.$code'
 
+const SelectRoleRoute = SelectRoleRouteImport.update({
+  id: '/select-role',
+  path: '/select-role',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/select-role': typeof SelectRoleRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/select-role': typeof SelectRoleRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions': typeof SolutionsIndexRoute
@@ -216,6 +224,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/select-role': typeof SelectRoleRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
@@ -242,6 +251,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy-center'
     | '/reset-password'
+    | '/select-role'
     | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions/'
@@ -266,6 +276,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy-center'
     | '/reset-password'
+    | '/select-role'
     | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions'
@@ -291,6 +302,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy-center'
     | '/reset-password'
+    | '/select-role'
     | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions/'
@@ -317,6 +329,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PrivacyCenterRoute: typeof PrivacyCenterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  SelectRoleRoute: typeof SelectRoleRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   SolutionsSlugRoute: typeof SolutionsSlugRoute
   SolutionsIndexRoute: typeof SolutionsIndexRoute
@@ -325,6 +338,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/select-role': {
+      id: '/select-role'
+      path: '/select-role'
+      fullPath: '/select-role'
+      preLoaderRoute: typeof SelectRoleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
@@ -526,6 +546,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PrivacyCenterRoute: PrivacyCenterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  SelectRoleRoute: SelectRoleRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   SolutionsSlugRoute: SolutionsSlugRoute,
   SolutionsIndexRoute: SolutionsIndexRoute,
