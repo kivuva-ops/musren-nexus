@@ -66,11 +66,16 @@ export function Navbar() {
 
           <div className="flex items-center gap-2">
             {canAdmin && (
-              <Link to="/admin/corporate-topup" className="hidden md:block">
-                <Button variant="ghost" size="sm">
-                  <LayoutDashboard className="size-4 mr-1.5" /> Admin
-                </Button>
-              </Link>
+              <>
+                <Link to="/admin/corporate-topup" className="hidden md:block">
+                  <Button variant="ghost" size="sm">
+                    <LayoutDashboard className="size-4 mr-1.5" /> Admin
+                  </Button>
+                </Link>
+                <Link to="/admin/role-requests" className="hidden lg:block">
+                  <Button variant="ghost" size="sm">Role requests</Button>
+                </Link>
+              </>
             )}
             {isAuthenticated ? (
               <Button variant="ghost" size="sm" onClick={signOut} className="hidden sm:inline-flex">
