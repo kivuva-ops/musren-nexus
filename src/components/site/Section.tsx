@@ -16,7 +16,7 @@ export function Section({
   return (
     <section className={`mx-auto max-w-7xl px-4 py-20 sm:py-28 ${className}`}>
       {(eyebrow || title || description) && (
-        <div className="max-w-2xl mb-14">
+        <div className="max-w-3xl mx-auto mb-14 text-center">
           {eyebrow && (
             <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-xs font-medium tracking-wide text-primary uppercase">
               {eyebrow}
