@@ -26,6 +26,7 @@ import { Route as AuthenticatedAffiliatesDashboardRouteImport } from './routes/_
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminRoleRequestsRouteImport } from './routes/_authenticated/admin.role-requests'
 import { Route as AuthenticatedAdminCorporateTopupRouteImport } from './routes/_authenticated/admin.corporate-topup'
+import { Route as AuthenticatedAdminConsentRouteImport } from './routes/_authenticated/admin.consent'
 import { Route as AuthenticatedAdminAffiliatesRouteImport } from './routes/_authenticated/admin.affiliates'
 import { Route as ApiPublicRCodeRouteImport } from './routes/api/public/r.$code'
 
@@ -117,6 +118,12 @@ const AuthenticatedAdminCorporateTopupRoute =
     path: '/admin/corporate-topup',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminConsentRoute =
+  AuthenticatedAdminConsentRouteImport.update({
+    id: '/admin/consent',
+    path: '/admin/consent',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminAffiliatesRoute =
   AuthenticatedAdminAffiliatesRouteImport.update({
     id: '/admin/affiliates',
@@ -142,6 +149,7 @@ export interface FileRoutesByFullPath {
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
+  '/admin/consent': typeof AuthenticatedAdminConsentRoute
   '/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
   '/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
@@ -162,6 +170,7 @@ export interface FileRoutesByTo {
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions': typeof SolutionsIndexRoute
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
+  '/admin/consent': typeof AuthenticatedAdminConsentRoute
   '/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
   '/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
@@ -184,6 +193,7 @@ export interface FileRoutesById {
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/_authenticated/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
+  '/_authenticated/admin/consent': typeof AuthenticatedAdminConsentRoute
   '/_authenticated/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
   '/_authenticated/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
@@ -206,6 +216,7 @@ export interface FileRouteTypes {
     | '/solutions/$slug'
     | '/solutions/'
     | '/admin/affiliates'
+    | '/admin/consent'
     | '/admin/corporate-topup'
     | '/admin/role-requests'
     | '/admin/users'
@@ -226,6 +237,7 @@ export interface FileRouteTypes {
     | '/solutions/$slug'
     | '/solutions'
     | '/admin/affiliates'
+    | '/admin/consent'
     | '/admin/corporate-topup'
     | '/admin/role-requests'
     | '/admin/users'
@@ -247,6 +259,7 @@ export interface FileRouteTypes {
     | '/solutions/$slug'
     | '/solutions/'
     | '/_authenticated/admin/affiliates'
+    | '/_authenticated/admin/consent'
     | '/_authenticated/admin/corporate-topup'
     | '/_authenticated/admin/role-requests'
     | '/_authenticated/admin/users'
@@ -392,6 +405,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminCorporateTopupRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/consent': {
+      id: '/_authenticated/admin/consent'
+      path: '/admin/consent'
+      fullPath: '/admin/consent'
+      preLoaderRoute: typeof AuthenticatedAdminConsentRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/affiliates': {
       id: '/_authenticated/admin/affiliates'
       path: '/admin/affiliates'
@@ -411,6 +431,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminAffiliatesRoute: typeof AuthenticatedAdminAffiliatesRoute
+  AuthenticatedAdminConsentRoute: typeof AuthenticatedAdminConsentRoute
   AuthenticatedAdminCorporateTopupRoute: typeof AuthenticatedAdminCorporateTopupRoute
   AuthenticatedAdminRoleRequestsRoute: typeof AuthenticatedAdminRoleRequestsRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
@@ -420,6 +441,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminAffiliatesRoute: AuthenticatedAdminAffiliatesRoute,
+  AuthenticatedAdminConsentRoute: AuthenticatedAdminConsentRoute,
   AuthenticatedAdminCorporateTopupRoute: AuthenticatedAdminCorporateTopupRoute,
   AuthenticatedAdminRoleRequestsRoute: AuthenticatedAdminRoleRequestsRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
@@ -449,3 +471,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
