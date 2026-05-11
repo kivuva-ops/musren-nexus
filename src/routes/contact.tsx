@@ -44,11 +44,18 @@ function ContactPage() {
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="space-y-4">
             {[
-              [Mail, "Email", "info@musre.co.ke"],
-              [Phone, "Phone", "0729 111 000"],
-              [MapPin, "HQ", "Nairobi, Kenya"],
-            ].map(([Icon, label, value]) => (
-              <div key={label as string} className="glass rounded-2xl p-5 flex items-start gap-4">
+              [Mail, "Email", "info@musre.co.ke", "mailto:info@musre.co.ke"],
+              [Phone, "Phone", "0729 111 000", "tel:+254729111000"],
+              [MessageCircle, "WhatsApp", "+254 721 657 224", "https://wa.me/254721657224"],
+              [MapPin, "HQ", "Nairobi, Kenya", null],
+            ].map(([Icon, label, value, href]) => (
+              <a
+                key={label as string}
+                href={(href as string) ?? undefined}
+                target={href && (href as string).startsWith("http") ? "_blank" : undefined}
+                rel="noopener noreferrer"
+                className={`glass rounded-2xl p-5 flex items-start gap-4 ${href ? "hover:border-primary/40 transition" : "pointer-events-none"}`}
+              >
                 <div className="size-10 rounded-lg bg-primary/15 grid place-items-center shrink-0">
                   <Icon className="size-4 text-primary" />
                 </div>
@@ -56,7 +63,7 @@ function ContactPage() {
                   <div className="text-xs uppercase tracking-wider text-muted-foreground">{label as string}</div>
                   <div className="font-medium mt-0.5">{value as string}</div>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
 
