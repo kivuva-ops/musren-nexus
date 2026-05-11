@@ -22,6 +22,7 @@ import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSlugRouteImport } from './routes/solutions/$slug'
 import { Route as AuthenticatedDevelopersDashboardRouteImport } from './routes/_authenticated/developers.dashboard'
 import { Route as AuthenticatedAffiliatesDashboardRouteImport } from './routes/_authenticated/affiliates.dashboard'
+import { Route as AuthenticatedAdminRoleRequestsRouteImport } from './routes/_authenticated/admin.role-requests'
 import { Route as AuthenticatedAdminCorporateTopupRouteImport } from './routes/_authenticated/admin.corporate-topup'
 
 const LoginRoute = LoginRouteImport.update({
@@ -90,6 +91,12 @@ const AuthenticatedAffiliatesDashboardRoute =
     path: '/affiliates/dashboard',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminRoleRequestsRoute =
+  AuthenticatedAdminRoleRequestsRouteImport.update({
+    id: '/admin/role-requests',
+    path: '/admin/role-requests',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminCorporateTopupRoute =
   AuthenticatedAdminCorporateTopupRouteImport.update({
     id: '/admin/corporate-topup',
@@ -109,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
+  '/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
   '/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
 }
@@ -124,6 +132,7 @@ export interface FileRoutesByTo {
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions': typeof SolutionsIndexRoute
   '/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
+  '/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
   '/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
 }
@@ -141,6 +150,7 @@ export interface FileRoutesById {
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/_authenticated/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
+  '/_authenticated/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
   '/_authenticated/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/_authenticated/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
 }
@@ -158,6 +168,7 @@ export interface FileRouteTypes {
     | '/solutions/$slug'
     | '/solutions/'
     | '/admin/corporate-topup'
+    | '/admin/role-requests'
     | '/affiliates/dashboard'
     | '/developers/dashboard'
   fileRoutesByTo: FileRoutesByTo
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/solutions/$slug'
     | '/solutions'
     | '/admin/corporate-topup'
+    | '/admin/role-requests'
     | '/affiliates/dashboard'
     | '/developers/dashboard'
   id:
@@ -189,6 +201,7 @@ export interface FileRouteTypes {
     | '/solutions/$slug'
     | '/solutions/'
     | '/_authenticated/admin/corporate-topup'
+    | '/_authenticated/admin/role-requests'
     | '/_authenticated/affiliates/dashboard'
     | '/_authenticated/developers/dashboard'
   fileRoutesById: FileRoutesById
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAffiliatesDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/role-requests': {
+      id: '/_authenticated/admin/role-requests'
+      path: '/admin/role-requests'
+      fullPath: '/admin/role-requests'
+      preLoaderRoute: typeof AuthenticatedAdminRoleRequestsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/corporate-topup': {
       id: '/_authenticated/admin/corporate-topup'
       path: '/admin/corporate-topup'
@@ -312,12 +332,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminCorporateTopupRoute: typeof AuthenticatedAdminCorporateTopupRoute
+  AuthenticatedAdminRoleRequestsRoute: typeof AuthenticatedAdminRoleRequestsRoute
   AuthenticatedAffiliatesDashboardRoute: typeof AuthenticatedAffiliatesDashboardRoute
   AuthenticatedDevelopersDashboardRoute: typeof AuthenticatedDevelopersDashboardRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminCorporateTopupRoute: AuthenticatedAdminCorporateTopupRoute,
+  AuthenticatedAdminRoleRequestsRoute: AuthenticatedAdminRoleRequestsRoute,
   AuthenticatedAffiliatesDashboardRoute: AuthenticatedAffiliatesDashboardRoute,
   AuthenticatedDevelopersDashboardRoute: AuthenticatedDevelopersDashboardRoute,
 }
@@ -342,3 +364,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
