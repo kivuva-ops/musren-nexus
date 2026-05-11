@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { Button } from "@/components/ui/button";
+import { RequestRoleAccess } from "@/components/site/RequestRoleAccess";
 
 export const Route = createFileRoute("/_authenticated/developers/dashboard")({
   head: () => ({
@@ -26,15 +27,13 @@ function DeveloperDashboard() {
           title="Developer access required"
           description="Your account doesn't have developer access yet. Request access and our team will enable it."
         >
-          <div className="flex flex-wrap gap-3">
-            <Link to="/contact">
-              <Button className="bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold">
-                Request developer access
-              </Button>
-            </Link>
-            <Link to="/developers">
-              <Button variant="outline" className="glass">Back to overview</Button>
-            </Link>
+          <div className="space-y-5">
+            <RequestRoleAccess role="developer" />
+            <div className="flex flex-wrap gap-3">
+              <Link to="/developers">
+                <Button variant="outline" className="glass">Back to overview</Button>
+              </Link>
+            </div>
           </div>
         </Section>
       </SiteLayout>

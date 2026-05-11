@@ -83,6 +83,45 @@ export type Database = {
         }
         Relationships: []
       }
+      role_requests: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          requested_role: Database["public"]["Enums"]["app_role"]
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          status: Database["public"]["Enums"]["role_request_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          requested_role: Database["public"]["Enums"]["app_role"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: Database["public"]["Enums"]["role_request_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          requested_role?: Database["public"]["Enums"]["app_role"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: Database["public"]["Enums"]["role_request_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -121,6 +160,7 @@ export type Database = {
       app_role: "admin" | "staff" | "user" | "developer" | "affiliate"
       inquiry_status: "new" | "contacted" | "qualified" | "rejected"
       preferred_contact: "Email" | "Phone call" | "WhatsApp"
+      role_request_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -251,6 +291,7 @@ export const Constants = {
       app_role: ["admin", "staff", "user", "developer", "affiliate"],
       inquiry_status: ["new", "contacted", "qualified", "rejected"],
       preferred_contact: ["Email", "Phone call", "WhatsApp"],
+      role_request_status: ["pending", "approved", "rejected"],
     },
   },
 } as const
