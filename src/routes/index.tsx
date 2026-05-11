@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, Code2, Globe2, Shield, Sparkles, Users, Zap, BarChart3, Quote } from "lucide-react";
+import { ArrowRight, Check, Code2, Globe2, Shield, Sparkles, Users, Zap, BarChart3 } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { ProductCard } from "@/components/site/ProductCard";
