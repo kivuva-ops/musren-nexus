@@ -5,6 +5,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { Button } from "@/components/ui/button";
 import { RequestRoleAccess } from "@/components/site/RequestRoleAccess";
+import { RolesBadges } from "@/components/site/RolesBadges";
 
 export const Route = createFileRoute("/_authenticated/affiliates/dashboard")({
   head: () => ({
@@ -28,6 +29,7 @@ function AffiliateDashboard() {
           description="Your account isn't enrolled in the affiliate program yet. Apply and our partner team will activate it."
         >
           <div className="space-y-5">
+            <RolesBadges highlightMissing="affiliate" />
             <RequestRoleAccess role="affiliate" />
             <div className="flex flex-wrap gap-3">
               <Link to="/affiliates">
@@ -52,6 +54,7 @@ function AffiliateDashboard() {
         title={<>Welcome back, <span className="text-gradient">{user?.email?.split("@")[0]}</span></>}
         description="Your affiliate workspace — referrals, performance and rewards."
       >
+        <div className="mb-6"><RolesBadges /></div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {cards.map((c) => (
             <div key={c.title} className="glass rounded-2xl p-6">
