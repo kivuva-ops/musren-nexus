@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PrivacyCenterRouteImport } from './routes/privacy-center'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndustriesRouteImport } from './routes/industries'
 import { Route as DevelopersRouteImport } from './routes/developers'
@@ -27,6 +28,11 @@ import { Route as AuthenticatedAdminCorporateTopupRouteImport } from './routes/_
 import { Route as AuthenticatedAdminAffiliatesRouteImport } from './routes/_authenticated/admin.affiliates'
 import { Route as ApiPublicRCodeRouteImport } from './routes/api/public/r.$code'
 
+const PrivacyCenterRoute = PrivacyCenterRouteImport.update({
+  id: '/privacy-center',
+  path: '/privacy-center',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -126,6 +132,7 @@ export interface FileRoutesByFullPath {
   '/developers': typeof DevelopersRoute
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
+  '/privacy-center': typeof PrivacyCenterRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -144,6 +151,7 @@ export interface FileRoutesByTo {
   '/developers': typeof DevelopersRoute
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
+  '/privacy-center': typeof PrivacyCenterRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions': typeof SolutionsIndexRoute
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -164,6 +172,7 @@ export interface FileRoutesById {
   '/developers': typeof DevelopersRoute
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
+  '/privacy-center': typeof PrivacyCenterRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/_authenticated/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/developers'
     | '/industries'
     | '/login'
+    | '/privacy-center'
     | '/solutions/$slug'
     | '/solutions/'
     | '/admin/affiliates'
@@ -202,6 +212,7 @@ export interface FileRouteTypes {
     | '/developers'
     | '/industries'
     | '/login'
+    | '/privacy-center'
     | '/solutions/$slug'
     | '/solutions'
     | '/admin/affiliates'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/developers'
     | '/industries'
     | '/login'
+    | '/privacy-center'
     | '/solutions/$slug'
     | '/solutions/'
     | '/_authenticated/admin/affiliates'
@@ -241,6 +253,7 @@ export interface RootRouteChildren {
   DevelopersRoute: typeof DevelopersRoute
   IndustriesRoute: typeof IndustriesRoute
   LoginRoute: typeof LoginRoute
+  PrivacyCenterRoute: typeof PrivacyCenterRoute
   SolutionsSlugRoute: typeof SolutionsSlugRoute
   SolutionsIndexRoute: typeof SolutionsIndexRoute
   ApiPublicRCodeRoute: typeof ApiPublicRCodeRoute
@@ -248,6 +261,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/privacy-center': {
+      id: '/privacy-center'
+      path: '/privacy-center'
+      fullPath: '/privacy-center'
+      preLoaderRoute: typeof PrivacyCenterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -400,6 +420,7 @@ const rootRouteChildren: RootRouteChildren = {
   DevelopersRoute: DevelopersRoute,
   IndustriesRoute: IndustriesRoute,
   LoginRoute: LoginRoute,
+  PrivacyCenterRoute: PrivacyCenterRoute,
   SolutionsSlugRoute: SolutionsSlugRoute,
   SolutionsIndexRoute: SolutionsIndexRoute,
   ApiPublicRCodeRoute: ApiPublicRCodeRoute,

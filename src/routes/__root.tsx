@@ -11,6 +11,8 @@ import {
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/hooks/use-auth";
+import { ConsentProvider } from "@/hooks/use-consent";
+import { ConsentBanner } from "@/components/site/ConsentBanner";
 
 function NotFoundComponent() {
   return (
@@ -120,8 +122,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
-        <Toaster />
+        <ConsentProvider>
+          <Outlet />
+          <ConsentBanner />
+          <Toaster />
+        </ConsentProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

@@ -28,6 +28,7 @@ export function Footer() {
         ["About", "/about"],
         ["Blog & News", "/blog"],
         ["Contact", "/contact"],
+        ["Privacy Center", "/privacy-center"],
       ],
     },
   ] as const;
