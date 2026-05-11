@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Zap } from "lucide-react";
+import { Zap, Eye, EyeOff } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/use-auth";
@@ -42,6 +42,21 @@ function LoginPage() {
   const search = Route.useSearch();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
+  const [showSigninPwd, setShowSigninPwd] = useState(false);
+  const [showSignupPwd, setShowSignupPwd] = useState(false);
+  const [showConfirmPwd, setShowConfirmPwd] = useState(false);
+
+  const PwdToggle = ({ show, onToggle }: { show: boolean; onToggle: () => void }) => (
+    <button
+      type="button"
+      onClick={onToggle}
+      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-muted-foreground hover:text-foreground rounded-md"
+      aria-label={show ? "Hide password" : "Show password"}
+      tabIndex={-1}
+    >
+      {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+    </button>
+  );
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
@@ -206,7 +221,10 @@ function LoginPage() {
                 </div>
                 <div>
                   <Label htmlFor="password">Password</Label>
-                  <Input id="password" name="password" type="password" required minLength={8} maxLength={72} className="mt-1.5 glass" />
+                  <div className="relative mt-1.5">
+                    <Input id="password" name="password" type={showSigninPwd ? "text" : "password"} required minLength={8} maxLength={72} className="glass pr-10" />
+                    <PwdToggle show={showSigninPwd} onToggle={() => setShowSigninPwd((v) => !v)} />
+                  </div>
                 </div>
                 <Button
                   type="submit"
@@ -226,12 +244,18 @@ function LoginPage() {
                 </div>
                 <div>
                   <Label htmlFor="password2">Password</Label>
-                  <Input id="password2" name="password" type="password" required minLength={8} maxLength={72} className="mt-1.5 glass" />
+                  <div className="relative mt-1.5">
+                    <Input id="password2" name="password" type={showSignupPwd ? "text" : "password"} required minLength={8} maxLength={72} className="glass pr-10" />
+                    <PwdToggle show={showSignupPwd} onToggle={() => setShowSignupPwd((v) => !v)} />
+                  </div>
                   <p className="mt-1 text-xs text-muted-foreground">At least 8 characters.</p>
                 </div>
                 <div>
                   <Label htmlFor="confirmPassword">Confirm password</Label>
-                  <Input id="confirmPassword" name="confirmPassword" type="password" required minLength={8} maxLength={72} className="mt-1.5 glass" />
+                  <div className="relative mt-1.5">
+                    <Input id="confirmPassword" name="confirmPassword" type={showConfirmPwd ? "text" : "password"} required minLength={8} maxLength={72} className="glass pr-10" />
+                    <PwdToggle show={showConfirmPwd} onToggle={() => setShowConfirmPwd((v) => !v)} />
+                  </div>
                 </div>
                 <Button
                   type="submit"
