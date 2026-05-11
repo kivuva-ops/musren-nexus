@@ -2,21 +2,39 @@ import { createContext, useContext, useEffect, useState, useCallback, type React
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 
-export const POLICY_VERSION = "1.0";
 export const CONSENT_CATEGORIES = ["necessary", "analytics", "marketing", "personalization"] as const;
 export type ConsentCategory = (typeof CONSENT_CATEGORIES)[number];
 export type ConsentMap = Record<ConsentCategory, boolean>;
 
 const STORAGE_KEY = "musren_consent_v1";
+const FALLBACK_VERSION = "1.0";
 
 type StoredConsent = { version: string; choices: ConsentMap; ts: number };
 
-const DEFAULT: ConsentMap = {
-  necessary: true,
-  analytics: false,
-  marketing: false,
-  personalization: false,
+interface ConsentSettings {
+  active_policy_version: string;
+  default_analytics: boolean;
+  default_marketing: boolean;
+  default_personalization: boolean;
+  reprompt_on_version_change: boolean;
+}
+
+const FALLBACK_SETTINGS: ConsentSettings = {
+  active_policy_version: FALLBACK_VERSION,
+  default_analytics: false,
+  default_marketing: false,
+  default_personalization: false,
+  reprompt_on_version_change: true,
 };
+
+function buildDefault(s: ConsentSettings): ConsentMap {
+  return {
+    necessary: true,
+    analytics: s.default_analytics,
+    marketing: s.default_marketing,
+    personalization: s.default_personalization,
+  };
+}
 
 export const ACCEPT_ALL: ConsentMap = {
   necessary: true,
@@ -34,9 +52,9 @@ function readLocal(): StoredConsent | null {
   } catch { return null; }
 }
 
-function writeLocal(choices: ConsentMap) {
+function writeLocal(version: string, choices: ConsentMap) {
   if (typeof window === "undefined") return;
-  const payload: StoredConsent = { version: POLICY_VERSION, choices, ts: Date.now() };
+  const payload: StoredConsent = { version, choices, ts: Date.now() };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
 }
 
@@ -54,25 +72,50 @@ const ConsentContext = createContext<ConsentContextValue | undefined>(undefined)
 
 export function ConsentProvider({ children }: { children: ReactNode }) {
   const { user, loading: authLoading } = useAuth();
-  const [choices, setChoices] = useState<ConsentMap>(DEFAULT);
+  const [settings, setSettings] = useState<ConsentSettings>(FALLBACK_SETTINGS);
+  const [choices, setChoices] = useState<ConsentMap>(buildDefault(FALLBACK_SETTINGS));
   const [needsPrompt, setNeedsPrompt] = useState(false);
   const [ready, setReady] = useState(false);
 
-  // Hydrate from localStorage immediately
+  // Load admin settings, then hydrate from local storage
   useEffect(() => {
-    const local = readLocal();
-    if (local && local.version === POLICY_VERSION) {
-      setChoices({ ...DEFAULT, ...local.choices });
-      setNeedsPrompt(false);
-    } else {
-      setNeedsPrompt(true);
-    }
-    setReady(true);
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("consent_settings")
+        .select("active_policy_version, default_analytics, default_marketing, default_personalization, reprompt_on_version_change")
+        .eq("id", 1).maybeSingle();
+      if (cancelled) return;
+      const s: ConsentSettings = data ?? FALLBACK_SETTINGS;
+      setSettings(s);
+      const local = readLocal();
+      const versionMatches = local && local.version === s.active_policy_version;
+      const versionAcceptable = local && (versionMatches || !s.reprompt_on_version_change);
+      if (local && versionAcceptable) {
+        setChoices({ ...buildDefault(s), ...local.choices, necessary: true });
+        setNeedsPrompt(false);
+      } else {
+        setChoices(buildDefault(s));
+        setNeedsPrompt(true);
+      }
+      setReady(true);
+    })();
+    return () => { cancelled = true; };
   }, []);
 
-  // When user logs in, sync DB → local. DB is source of truth for logged-in users.
+  const persist = useCallback(async (next: ConsentMap, source: string) => {
+    if (!user) return;
+    const items = CONSENT_CATEGORIES.map((c) => ({ category: c, granted: next[c] }));
+    await supabase.rpc("record_user_consents", {
+      _items: items,
+      _policy_version: settings.active_policy_version,
+      _source: source,
+    });
+  }, [user, settings.active_policy_version]);
+
+  // Sync DB when authenticated
   useEffect(() => {
-    if (authLoading || !user) return;
+    if (!ready || authLoading || !user) return;
     let cancelled = false;
     (async () => {
       const { data } = await supabase
@@ -80,23 +123,22 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
         .select("category, granted, policy_version")
         .eq("user_id", user.id);
       if (cancelled) return;
+      const targetVersion = settings.active_policy_version;
       if (data && data.length > 0) {
-        const versionsOk = data.every((r) => r.policy_version === POLICY_VERSION);
+        const versionsOk = !settings.reprompt_on_version_change
+          || data.every((r) => r.policy_version === targetVersion);
         if (versionsOk) {
-          const merged: ConsentMap = { ...DEFAULT };
-          for (const r of data) {
-            merged[r.category as ConsentCategory] = !!r.granted;
-          }
+          const merged: ConsentMap = { ...buildDefault(settings) };
+          for (const r of data) merged[r.category as ConsentCategory] = !!r.granted;
           merged.necessary = true;
           setChoices(merged);
-          writeLocal(merged);
+          writeLocal(targetVersion, merged);
           setNeedsPrompt(false);
           return;
         }
       }
-      // No DB record (or stale version): if local already covers current version, persist it to DB silently.
       const local = readLocal();
-      if (local && local.version === POLICY_VERSION) {
+      if (local && local.version === targetVersion) {
         await persist(local.choices, "sync");
         setNeedsPrompt(false);
       } else {
@@ -104,37 +146,26 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
       }
     })();
     return () => { cancelled = true; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, authLoading]);
-
-  const persist = useCallback(async (next: ConsentMap, source: string) => {
-    if (!user) return;
-    const items = CONSENT_CATEGORIES.map((c) => ({ category: c, granted: next[c] }));
-    await supabase.rpc("record_user_consents", {
-      _items: items,
-      _policy_version: POLICY_VERSION,
-      _source: source,
-    });
-  }, [user]);
+  }, [user, authLoading, ready, settings, persist]);
 
   const save = useCallback(async (next: ConsentMap, source = "banner") => {
     const sanitized: ConsentMap = { ...next, necessary: true };
     setChoices(sanitized);
-    writeLocal(sanitized);
+    writeLocal(settings.active_policy_version, sanitized);
     setNeedsPrompt(false);
     if (user) await persist(sanitized, source);
-  }, [user, persist]);
+  }, [user, persist, settings.active_policy_version]);
 
   const withdraw = useCallback(async () => {
-    const next: ConsentMap = { ...DEFAULT };
+    const next: ConsentMap = buildDefault(settings);
     await save(next, "withdraw");
     setNeedsPrompt(true);
-  }, [save]);
+  }, [save, settings]);
 
   const reopenBanner = useCallback(() => setNeedsPrompt(true), []);
 
   return (
-    <ConsentContext.Provider value={{ ready, needsPrompt, choices, policyVersion: POLICY_VERSION, save, withdraw, reopenBanner }}>
+    <ConsentContext.Provider value={{ ready, needsPrompt, choices, policyVersion: settings.active_policy_version, save, withdraw, reopenBanner }}>
       {children}
     </ConsentContext.Provider>
   );
@@ -145,3 +176,6 @@ export function useConsent() {
   if (!ctx) throw new Error("useConsent must be used within ConsentProvider");
   return ctx;
 }
+
+// Back-compat export: callers prefer useConsent().policyVersion
+export const POLICY_VERSION = FALLBACK_VERSION;
