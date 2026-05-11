@@ -23,6 +23,7 @@ import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSlugRouteImport } from './routes/solutions/$slug'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedDevelopersDashboardRouteImport } from './routes/_authenticated/developers.dashboard'
 import { Route as AuthenticatedAffiliatesDashboardRouteImport } from './routes/_authenticated/affiliates.dashboard'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
@@ -101,6 +102,11 @@ const SolutionsSlugRoute = SolutionsSlugRouteImport.update({
   path: '/solutions/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedDevelopersDashboardRoute =
   AuthenticatedDevelopersDashboardRouteImport.update({
     id: '/developers/dashboard',
@@ -160,6 +166,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions': typeof SolutionsIndexRoute
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -208,6 +216,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/_authenticated/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy-center'
     | '/reset-password'
+    | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions/'
     | '/admin/affiliates'
@@ -256,6 +266,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy-center'
     | '/reset-password'
+    | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions'
     | '/admin/affiliates'
@@ -280,6 +291,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/privacy-center'
     | '/reset-password'
+    | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions/'
     | '/_authenticated/admin/affiliates'
@@ -305,6 +317,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PrivacyCenterRoute: typeof PrivacyCenterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   SolutionsSlugRoute: typeof SolutionsSlugRoute
   SolutionsIndexRoute: typeof SolutionsIndexRoute
   ApiPublicRCodeRoute: typeof ApiPublicRCodeRoute
@@ -410,6 +423,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SolutionsSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/developers/dashboard': {
       id: '/_authenticated/developers/dashboard'
       path: '/developers/dashboard'
@@ -506,6 +526,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PrivacyCenterRoute: PrivacyCenterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   SolutionsSlugRoute: SolutionsSlugRoute,
   SolutionsIndexRoute: SolutionsIndexRoute,
   ApiPublicRCodeRoute: ApiPublicRCodeRoute,
@@ -513,3 +534,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
