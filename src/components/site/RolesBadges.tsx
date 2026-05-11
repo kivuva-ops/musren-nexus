@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { ShieldCheck } from "lucide-react";
 
 const roleStyles: Record<AppRole, string> = {
+  superadmin: "bg-fuchsia-500/15 text-fuchsia-400 border-fuchsia-500/30",
   admin: "bg-primary/15 text-primary border-primary/30",
   staff: "bg-accent/15 text-accent border-accent/30",
   developer: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",

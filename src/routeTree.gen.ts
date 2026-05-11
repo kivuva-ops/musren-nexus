@@ -23,6 +23,7 @@ import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSlugRouteImport } from './routes/solutions/$slug'
 import { Route as AuthenticatedDevelopersDashboardRouteImport } from './routes/_authenticated/developers.dashboard'
 import { Route as AuthenticatedAffiliatesDashboardRouteImport } from './routes/_authenticated/affiliates.dashboard'
+import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminRoleRequestsRouteImport } from './routes/_authenticated/admin.role-requests'
 import { Route as AuthenticatedAdminCorporateTopupRouteImport } from './routes/_authenticated/admin.corporate-topup'
 import { Route as AuthenticatedAdminAffiliatesRouteImport } from './routes/_authenticated/admin.affiliates'
@@ -99,6 +100,11 @@ const AuthenticatedAffiliatesDashboardRoute =
     path: '/affiliates/dashboard',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAdminUsersRoute = AuthenticatedAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAdminRoleRequestsRoute =
   AuthenticatedAdminRoleRequestsRouteImport.update({
     id: '/admin/role-requests',
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
   '/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
   '/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
   '/api/public/r/$code': typeof ApiPublicRCodeRoute
@@ -157,6 +164,7 @@ export interface FileRoutesByTo {
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
   '/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
   '/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
+  '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
   '/api/public/r/$code': typeof ApiPublicRCodeRoute
@@ -178,6 +186,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
   '/_authenticated/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
   '/_authenticated/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
+  '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/_authenticated/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
   '/api/public/r/$code': typeof ApiPublicRCodeRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/admin/affiliates'
     | '/admin/corporate-topup'
     | '/admin/role-requests'
+    | '/admin/users'
     | '/affiliates/dashboard'
     | '/developers/dashboard'
     | '/api/public/r/$code'
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/admin/affiliates'
     | '/admin/corporate-topup'
     | '/admin/role-requests'
+    | '/admin/users'
     | '/affiliates/dashboard'
     | '/developers/dashboard'
     | '/api/public/r/$code'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/affiliates'
     | '/_authenticated/admin/corporate-topup'
     | '/_authenticated/admin/role-requests'
+    | '/_authenticated/admin/users'
     | '/_authenticated/affiliates/dashboard'
     | '/_authenticated/developers/dashboard'
     | '/api/public/r/$code'
@@ -359,6 +371,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAffiliatesDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/admin/users': {
+      id: '/_authenticated/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof AuthenticatedAdminUsersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/role-requests': {
       id: '/_authenticated/admin/role-requests'
       path: '/admin/role-requests'
@@ -394,6 +413,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminAffiliatesRoute: typeof AuthenticatedAdminAffiliatesRoute
   AuthenticatedAdminCorporateTopupRoute: typeof AuthenticatedAdminCorporateTopupRoute
   AuthenticatedAdminRoleRequestsRoute: typeof AuthenticatedAdminRoleRequestsRoute
+  AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAffiliatesDashboardRoute: typeof AuthenticatedAffiliatesDashboardRoute
   AuthenticatedDevelopersDashboardRoute: typeof AuthenticatedDevelopersDashboardRoute
 }
@@ -402,6 +422,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminAffiliatesRoute: AuthenticatedAdminAffiliatesRoute,
   AuthenticatedAdminCorporateTopupRoute: AuthenticatedAdminCorporateTopupRoute,
   AuthenticatedAdminRoleRequestsRoute: AuthenticatedAdminRoleRequestsRoute,
+  AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAffiliatesDashboardRoute: AuthenticatedAffiliatesDashboardRoute,
   AuthenticatedDevelopersDashboardRoute: AuthenticatedDevelopersDashboardRoute,
 }

@@ -677,6 +677,7 @@ export type Database = {
         }
         Returns: string
       }
+      claim_first_superadmin: { Args: never; Returns: boolean }
       get_active_loyalty_rate: {
         Args: { _kind: Database["public"]["Enums"]["loyalty_rate_kind"] }
         Returns: {
@@ -685,6 +686,13 @@ export type Database = {
           value_amount: number
         }[]
       }
+      grant_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -692,14 +700,35 @@ export type Database = {
         }
         Returns: boolean
       }
+      list_users_with_roles: {
+        Args: never
+        Returns: {
+          email: string
+          roles: Database["public"]["Enums"]["app_role"][]
+          user_id: string
+        }[]
+      }
       record_user_consents: {
         Args: { _items: Json; _policy_version: string; _source?: string }
+        Returns: undefined
+      }
+      revoke_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
         Returns: undefined
       }
     }
     Enums: {
       affiliate_event_kind: "click" | "signup" | "purchase"
-      app_role: "admin" | "staff" | "user" | "developer" | "affiliate"
+      app_role:
+        | "admin"
+        | "staff"
+        | "user"
+        | "developer"
+        | "affiliate"
+        | "superadmin"
       consent_category:
         | "necessary"
         | "analytics"
@@ -841,7 +870,14 @@ export const Constants = {
   public: {
     Enums: {
       affiliate_event_kind: ["click", "signup", "purchase"],
-      app_role: ["admin", "staff", "user", "developer", "affiliate"],
+      app_role: [
+        "admin",
+        "staff",
+        "user",
+        "developer",
+        "affiliate",
+        "superadmin",
+      ],
       consent_category: [
         "necessary",
         "analytics",

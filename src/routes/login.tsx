@@ -30,6 +30,13 @@ const credSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters").max(72),
 });
 
+const signupSchema = credSchema.extend({
+  confirmPassword: z.string().min(8).max(72),
+}).refine((d) => d.password === d.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
 function LoginPage() {
   const { isAuthenticated, loading } = useAuth();
   const search = Route.useSearch();
@@ -100,23 +107,33 @@ function LoginPage() {
   ) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
-    const parsed = credSchema.safeParse({
-      email: String(fd.get("email") ?? ""),
-      password: String(fd.get("password") ?? ""),
-    });
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Please check your input.");
-      return;
+    const email = String(fd.get("email") ?? "");
+    const password = String(fd.get("password") ?? "");
+    if (mode === "signup") {
+      const parsed = signupSchema.safeParse({
+        email, password,
+        confirmPassword: String(fd.get("confirmPassword") ?? ""),
+      });
+      if (!parsed.success) {
+        toast.error(parsed.error.issues[0]?.message ?? "Please check your input.");
+        return;
+      }
+    } else {
+      const parsed = credSchema.safeParse({ email, password });
+      if (!parsed.success) {
+        toast.error(parsed.error.issues[0]?.message ?? "Please check your input.");
+        return;
+      }
     }
     setBusy(true);
     try {
       if (mode === "signin") {
-        const { error } = await supabase.auth.signInWithPassword(parsed.data);
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Signed in successfully");
       } else {
         const { error } = await supabase.auth.signUp({
-          ...parsed.data,
+          email, password,
           options: { emailRedirectTo: `${window.location.origin}/login` },
         });
         if (error) throw error;
@@ -210,6 +227,11 @@ function LoginPage() {
                 <div>
                   <Label htmlFor="password2">Password</Label>
                   <Input id="password2" name="password" type="password" required minLength={8} maxLength={72} className="mt-1.5 glass" />
+                  <p className="mt-1 text-xs text-muted-foreground">At least 8 characters.</p>
+                </div>
+                <div>
+                  <Label htmlFor="confirmPassword">Confirm password</Label>
+                  <Input id="confirmPassword" name="confirmPassword" type="password" required minLength={8} maxLength={72} className="mt-1.5 glass" />
                 </div>
                 <Button
                   type="submit"

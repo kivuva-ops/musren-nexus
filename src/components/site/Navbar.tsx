@@ -78,6 +78,9 @@ export function Navbar() {
                 <Link to="/admin/affiliates" className="hidden lg:block">
                   <Button variant="ghost" size="sm">Affiliates</Button>
                 </Link>
+                <Link to="/admin/users" className="hidden lg:block">
+                  <Button variant="ghost" size="sm">Users</Button>
+                </Link>
               </>
             )}
             {isAuthenticated ? (
