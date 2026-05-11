@@ -21,6 +21,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSlugRouteImport } from './routes/solutions/$slug'
 import { Route as AuthenticatedDevelopersDashboardRouteImport } from './routes/_authenticated/developers.dashboard'
+import { Route as AuthenticatedAffiliatesDashboardRouteImport } from './routes/_authenticated/affiliates.dashboard'
 import { Route as AuthenticatedAdminCorporateTopupRouteImport } from './routes/_authenticated/admin.corporate-topup'
 
 const LoginRoute = LoginRouteImport.update({
@@ -83,6 +84,12 @@ const AuthenticatedDevelopersDashboardRoute =
     path: '/developers/dashboard',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedAffiliatesDashboardRoute =
+  AuthenticatedAffiliatesDashboardRouteImport.update({
+    id: '/affiliates/dashboard',
+    path: '/affiliates/dashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAdminCorporateTopupRoute =
   AuthenticatedAdminCorporateTopupRouteImport.update({
     id: '/admin/corporate-topup',
@@ -102,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
+  '/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
 }
 export interface FileRoutesByTo {
@@ -116,6 +124,7 @@ export interface FileRoutesByTo {
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions': typeof SolutionsIndexRoute
   '/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
+  '/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
 }
 export interface FileRoutesById {
@@ -132,6 +141,7 @@ export interface FileRoutesById {
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/_authenticated/admin/corporate-topup': typeof AuthenticatedAdminCorporateTopupRoute
+  '/_authenticated/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/_authenticated/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
 }
 export interface FileRouteTypes {
@@ -148,6 +158,7 @@ export interface FileRouteTypes {
     | '/solutions/$slug'
     | '/solutions/'
     | '/admin/corporate-topup'
+    | '/affiliates/dashboard'
     | '/developers/dashboard'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -162,6 +173,7 @@ export interface FileRouteTypes {
     | '/solutions/$slug'
     | '/solutions'
     | '/admin/corporate-topup'
+    | '/affiliates/dashboard'
     | '/developers/dashboard'
   id:
     | '__root__'
@@ -177,6 +189,7 @@ export interface FileRouteTypes {
     | '/solutions/$slug'
     | '/solutions/'
     | '/_authenticated/admin/corporate-topup'
+    | '/_authenticated/affiliates/dashboard'
     | '/_authenticated/developers/dashboard'
   fileRoutesById: FileRoutesById
 }
@@ -280,6 +293,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDevelopersDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/affiliates/dashboard': {
+      id: '/_authenticated/affiliates/dashboard'
+      path: '/affiliates/dashboard'
+      fullPath: '/affiliates/dashboard'
+      preLoaderRoute: typeof AuthenticatedAffiliatesDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/admin/corporate-topup': {
       id: '/_authenticated/admin/corporate-topup'
       path: '/admin/corporate-topup'
@@ -292,11 +312,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAdminCorporateTopupRoute: typeof AuthenticatedAdminCorporateTopupRoute
+  AuthenticatedAffiliatesDashboardRoute: typeof AuthenticatedAffiliatesDashboardRoute
   AuthenticatedDevelopersDashboardRoute: typeof AuthenticatedDevelopersDashboardRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminCorporateTopupRoute: AuthenticatedAdminCorporateTopupRoute,
+  AuthenticatedAffiliatesDashboardRoute: AuthenticatedAffiliatesDashboardRoute,
   AuthenticatedDevelopersDashboardRoute: AuthenticatedDevelopersDashboardRoute,
 }
 
