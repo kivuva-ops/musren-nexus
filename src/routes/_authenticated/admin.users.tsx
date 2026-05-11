@@ -24,7 +24,6 @@ function UsersPage() {
   const { hasRole, hasAnyRole, user, loading, refreshRoles } = useAuth();
   const isSuper = hasRole("superadmin");
   const isAdmin = hasAnyRole(["admin", "superadmin"]);
-  const qc = useQueryClient();
 
   const claim = useMutation({
     mutationFn: async () => {
