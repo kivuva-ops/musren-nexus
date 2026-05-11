@@ -34,6 +34,7 @@ import { Route as AuthenticatedAdminCorporateTopupRouteImport } from './routes/_
 import { Route as AuthenticatedAdminConsentRouteImport } from './routes/_authenticated/admin.consent'
 import { Route as AuthenticatedAdminAffiliatesRouteImport } from './routes/_authenticated/admin.affiliates'
 import { Route as ApiPublicRCodeRouteImport } from './routes/api/public/r.$code'
+import { Route as AuthenticatedAffiliatesPromoteSlugRouteImport } from './routes/_authenticated/affiliates.promote.$slug'
 
 const SelectRoleRoute = SelectRoleRouteImport.update({
   id: '/select-role',
@@ -165,6 +166,12 @@ const ApiPublicRCodeRoute = ApiPublicRCodeRouteImport.update({
   path: '/api/public/r/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAffiliatesPromoteSlugRoute =
+  AuthenticatedAffiliatesPromoteSlugRouteImport.update({
+    id: '/affiliates/promote/$slug',
+    path: '/affiliates/promote/$slug',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
+  '/affiliates/promote/$slug': typeof AuthenticatedAffiliatesPromoteSlugRoute
   '/api/public/r/$code': typeof ApiPublicRCodeRoute
 }
 export interface FileRoutesByTo {
@@ -216,6 +224,7 @@ export interface FileRoutesByTo {
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
+  '/affiliates/promote/$slug': typeof AuthenticatedAffiliatesPromoteSlugRoute
   '/api/public/r/$code': typeof ApiPublicRCodeRoute
 }
 export interface FileRoutesById {
@@ -244,6 +253,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
   '/_authenticated/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
+  '/_authenticated/affiliates/promote/$slug': typeof AuthenticatedAffiliatesPromoteSlugRoute
   '/api/public/r/$code': typeof ApiPublicRCodeRoute
 }
 export interface FileRouteTypes {
@@ -272,6 +282,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/affiliates/dashboard'
     | '/developers/dashboard'
+    | '/affiliates/promote/$slug'
     | '/api/public/r/$code'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -298,6 +309,7 @@ export interface FileRouteTypes {
     | '/admin/users'
     | '/affiliates/dashboard'
     | '/developers/dashboard'
+    | '/affiliates/promote/$slug'
     | '/api/public/r/$code'
   id:
     | '__root__'
@@ -325,6 +337,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/users'
     | '/_authenticated/affiliates/dashboard'
     | '/_authenticated/developers/dashboard'
+    | '/_authenticated/affiliates/promote/$slug'
     | '/api/public/r/$code'
   fileRoutesById: FileRoutesById
 }
@@ -525,6 +538,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicRCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/affiliates/promote/$slug': {
+      id: '/_authenticated/affiliates/promote/$slug'
+      path: '/affiliates/promote/$slug'
+      fullPath: '/affiliates/promote/$slug'
+      preLoaderRoute: typeof AuthenticatedAffiliatesPromoteSlugRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -537,6 +557,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAffiliatesDashboardRoute: typeof AuthenticatedAffiliatesDashboardRoute
   AuthenticatedDevelopersDashboardRoute: typeof AuthenticatedDevelopersDashboardRoute
+  AuthenticatedAffiliatesPromoteSlugRoute: typeof AuthenticatedAffiliatesPromoteSlugRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -548,6 +569,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAffiliatesDashboardRoute: AuthenticatedAffiliatesDashboardRoute,
   AuthenticatedDevelopersDashboardRoute: AuthenticatedDevelopersDashboardRoute,
+  AuthenticatedAffiliatesPromoteSlugRoute:
+    AuthenticatedAffiliatesPromoteSlugRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

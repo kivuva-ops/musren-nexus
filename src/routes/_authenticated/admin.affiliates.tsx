@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft, Settings2, Sparkles, Coins, Trophy, ShieldCheck, Wallet, Plus, Save, CheckCircle2, XCircle, Loader2,
+  ImageIcon, Megaphone, Trash2, Upload,
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -48,15 +49,19 @@ function AffiliateAdminPage() {
           </Link>
         </div>
         <Tabs defaultValue="rules">
-          <TabsList className="grid grid-cols-3 lg:grid-cols-6 w-full">
+          <TabsList className="grid grid-cols-4 lg:grid-cols-8 w-full">
             <TabsTrigger value="rules"><Settings2 className="size-4 mr-1.5" />Rules</TabsTrigger>
+            <TabsTrigger value="assets"><ImageIcon className="size-4 mr-1.5" />Assets</TabsTrigger>
+            <TabsTrigger value="templates"><Megaphone className="size-4 mr-1.5" />Templates</TabsTrigger>
             <TabsTrigger value="promos"><Sparkles className="size-4 mr-1.5" />Promotions</TabsTrigger>
             <TabsTrigger value="rates"><Coins className="size-4 mr-1.5" />Exchange</TabsTrigger>
-            <TabsTrigger value="withdrawals"><Wallet className="size-4 mr-1.5" />Withdrawals</TabsTrigger>
+            <TabsTrigger value="withdrawals"><Wallet className="size-4 mr-1.5" />Payouts</TabsTrigger>
             <TabsTrigger value="config"><ShieldCheck className="size-4 mr-1.5" />Config</TabsTrigger>
             <TabsTrigger value="board"><Trophy className="size-4 mr-1.5" />Leaderboard</TabsTrigger>
           </TabsList>
           <TabsContent value="rules" className="mt-6"><RulesTab canEdit={hasRole("admin")} /></TabsContent>
+          <TabsContent value="assets" className="mt-6"><AssetsTab canEdit={hasRole("admin")} /></TabsContent>
+          <TabsContent value="templates" className="mt-6"><TemplatesTab canEdit={hasRole("admin")} /></TabsContent>
           <TabsContent value="promos" className="mt-6"><PromotionsTab canEdit={hasRole("admin")} /></TabsContent>
           <TabsContent value="rates" className="mt-6"><RatesTab canEdit={hasRole("admin")} /></TabsContent>
           <TabsContent value="withdrawals" className="mt-6"><WithdrawalsTab /></TabsContent>
@@ -512,3 +517,231 @@ function LeaderboardTab() {
 /* ============ helpers ============ */
 function Sk() { return <div className="h-32 rounded-2xl bg-muted/30 animate-pulse" />; }
 function Empty({ msg }: { msg: string }) { return <div className="glass rounded-2xl p-8 text-center text-muted-foreground">{msg}</div>; }
+
+/* ============ Assets ============ */
+const ASSET_KINDS = ["poster","logo","video","sms_template","whatsapp_template","email_copy","social_caption","script","other"] as const;
+
+function AssetsTab({ canEdit }: { canEdit: boolean }) {
+  const qc = useQueryClient();
+  const [productSlug, setProductSlug] = useState<string>(products[0].slug);
+  const [form, setForm] = useState<{ kind: string; title: string; body_text: string; notes: string; file: File | null; file_url: string }>({
+    kind: "poster", title: "", body_text: "", notes: "", file: null, file_url: "",
+  });
+  const [uploading, setUploading] = useState(false);
+
+  const list = useQuery({
+    queryKey: ["admin-assets", productSlug],
+    queryFn: async () => {
+      const { data } = await (supabase as any).from("product_assets")
+        .select("*").eq("product_slug", productSlug).order("created_at", { ascending: false });
+      return data ?? [];
+    },
+  });
+
+  const create = useMutation({
+    mutationFn: async () => {
+      if (!form.title.trim()) throw new Error("Title required");
+      let file_url = form.file_url || null;
+      if (form.file) {
+        setUploading(true);
+        const ext = form.file.name.split(".").pop();
+        const path = `${productSlug}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+        const { error: upErr } = await (supabase as any).storage.from("affiliate-assets").upload(path, form.file, { upsert: false });
+        setUploading(false);
+        if (upErr) throw upErr;
+        const { data: pub } = (supabase as any).storage.from("affiliate-assets").getPublicUrl(path);
+        file_url = pub.publicUrl;
+      }
+      const { error } = await (supabase as any).from("product_assets").insert({
+        product_slug: productSlug, kind: form.kind, title: form.title,
+        body_text: form.body_text || null, notes: form.notes || null, file_url, active: true,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Asset added");
+      setForm({ kind: "poster", title: "", body_text: "", notes: "", file: null, file_url: "" });
+      qc.invalidateQueries({ queryKey: ["admin-assets", productSlug] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const toggleActive = useMutation({
+    mutationFn: async ({ id, active }: { id: string; active: boolean }) => {
+      const { error } = await (supabase as any).from("product_assets").update({ active }).eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-assets", productSlug] }),
+  });
+
+  const del = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await (supabase as any).from("product_assets").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Deleted"); qc.invalidateQueries({ queryKey: ["admin-assets", productSlug] }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center gap-3">
+        <span className="text-sm text-muted-foreground">Product</span>
+        <Select value={productSlug} onValueChange={setProductSlug}>
+          <SelectTrigger className="glass max-w-xs"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            {products.map((p) => <SelectItem key={p.slug} value={p.slug}>{p.name}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {canEdit && (
+        <div className="glass rounded-2xl p-5 space-y-3">
+          <h3 className="font-semibold">Add asset</h3>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <label className="space-y-1"><span className="text-xs text-muted-foreground">Kind</span>
+              <Select value={form.kind} onValueChange={(v) => setForm({ ...form, kind: v })}>
+                <SelectTrigger className="glass"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {ASSET_KINDS.map((k) => <SelectItem key={k} value={k}>{k.replace("_", " ")}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </label>
+            <label className="space-y-1"><span className="text-xs text-muted-foreground">Title</span>
+              <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="glass" placeholder="Hero poster v1" />
+            </label>
+          </div>
+          <label className="space-y-1 block"><span className="text-xs text-muted-foreground">Body text (for SMS / captions / scripts)</span>
+            <Textarea value={form.body_text} onChange={(e) => setForm({ ...form, body_text: e.target.value })} className="glass" rows={3} />
+          </label>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <label className="space-y-1 block"><span className="text-xs text-muted-foreground">Upload file (image/video/pdf)</span>
+              <Input type="file" onChange={(e) => setForm({ ...form, file: e.target.files?.[0] ?? null })} className="glass" accept="image/*,video/*,.pdf" />
+            </label>
+            <label className="space-y-1 block"><span className="text-xs text-muted-foreground">…or paste a public URL</span>
+              <Input value={form.file_url} onChange={(e) => setForm({ ...form, file_url: e.target.value })} className="glass" placeholder="https://…" />
+            </label>
+          </div>
+          <Input value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="glass" placeholder="Usage notes (optional)" />
+          <Button onClick={() => create.mutate()} disabled={create.isPending || uploading} className="bg-gradient-to-r from-primary to-accent text-primary-foreground">
+            {create.isPending || uploading ? <Loader2 className="size-4 animate-spin" /> : <><Upload className="size-4 mr-1.5" /> Add asset</>}
+          </Button>
+        </div>
+      )}
+
+      {list.isLoading ? <Sk /> : (list.data ?? []).length === 0 ? <Empty msg="No assets for this product yet." /> : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {list.data!.map((a: any) => (
+            <div key={a.id} className="glass rounded-xl overflow-hidden border border-border/50">
+              {a.kind === "poster" || a.kind === "logo" ? (
+                a.file_url && <img src={a.file_url} alt={a.title} className="w-full h-32 object-cover" loading="lazy" />
+              ) : a.kind === "video" ? (
+                a.file_url && <video src={a.file_url} className="w-full h-32 object-cover" />
+              ) : null}
+              <div className="p-3 space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-sm truncate">{a.title}</div>
+                    <Badge variant="outline" className="text-[10px] mt-0.5 capitalize">{String(a.kind).replace("_", " ")}</Badge>
+                  </div>
+                  {canEdit && (
+                    <div className="flex items-center gap-1">
+                      <Switch checked={a.active} onCheckedChange={(v) => toggleActive.mutate({ id: a.id, active: v })} />
+                      <Button size="sm" variant="ghost" onClick={() => { if (confirm("Delete asset?")) del.mutate(a.id); }}>
+                        <Trash2 className="size-3.5 text-destructive" />
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                {a.body_text && <div className="text-xs bg-background/60 rounded p-2 max-h-20 overflow-y-auto whitespace-pre-wrap">{a.body_text}</div>}
+                {a.notes && <p className="text-xs text-muted-foreground">{a.notes}</p>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ============ Share Templates ============ */
+const SHARE_CHANNELS = ["whatsapp","sms","email","facebook","instagram","tiktok","x","telegram"] as const;
+
+function TemplatesTab({ canEdit }: { canEdit: boolean }) {
+  const qc = useQueryClient();
+  const [productSlug, setProductSlug] = useState<string>(products[0].slug);
+
+  const list = useQuery({
+    queryKey: ["admin-templates", productSlug],
+    queryFn: async () => {
+      const { data } = await (supabase as any).from("share_templates")
+        .select("*").eq("product_slug", productSlug);
+      return (data ?? []) as Array<{ id?: string; channel: string; body: string; cta: string | null; active: boolean }>;
+    },
+  });
+
+  const upsert = useMutation({
+    mutationFn: async (row: { channel: string; body: string; cta: string; active: boolean }) => {
+      const { error } = await (supabase as any).from("share_templates").upsert({
+        product_slug: productSlug, channel: row.channel, body: row.body,
+        cta: row.cta || null, active: row.active,
+      }, { onConflict: "product_slug,channel" });
+      if (error) throw error;
+    },
+    onSuccess: () => { toast.success("Saved"); qc.invalidateQueries({ queryKey: ["admin-templates", productSlug] }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const byChannel = new Map(list.data?.map((t) => [t.channel, t]) ?? []);
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center gap-3">
+        <span className="text-sm text-muted-foreground">Product</span>
+        <Select value={productSlug} onValueChange={setProductSlug}>
+          <SelectTrigger className="glass max-w-xs"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            {products.map((p) => <SelectItem key={p.slug} value={p.slug}>{p.name}</SelectItem>)}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="grid lg:grid-cols-2 gap-4">
+        {SHARE_CHANNELS.map((ch) => (
+          <TemplateRow
+            key={ch}
+            channel={ch}
+            current={byChannel.get(ch)}
+            canEdit={canEdit}
+            onSave={(row) => upsert.mutate(row)}
+            busy={upsert.isPending}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TemplateRow({ channel, current, canEdit, onSave, busy }: {
+  channel: string; current?: { body: string; cta: string | null; active: boolean };
+  canEdit: boolean; onSave: (r: { channel: string; body: string; cta: string; active: boolean }) => void; busy: boolean;
+}) {
+  const [body, setBody] = useState(current?.body ?? "");
+  const [cta, setCta] = useState(current?.cta ?? "");
+  const [active, setActive] = useState(current?.active ?? true);
+  return (
+    <div className="glass rounded-2xl p-4 space-y-2">
+      <div className="flex items-center justify-between">
+        <div className="font-semibold capitalize">{channel}</div>
+        <div className="flex items-center gap-2 text-xs">Active <Switch checked={active} onCheckedChange={setActive} disabled={!canEdit} /></div>
+      </div>
+      <Textarea value={body} onChange={(e) => setBody(e.target.value)} className="glass" rows={3} placeholder="Default share message" disabled={!canEdit} />
+      <Input value={cta} onChange={(e) => setCta(e.target.value)} className="glass" placeholder="CTA (e.g. Try it free)" disabled={!canEdit} />
+      {canEdit && (
+        <Button size="sm" onClick={() => onSave({ channel, body, cta, active })} disabled={busy || !body.trim()}>
+          <Save className="size-3.5 mr-1.5" /> Save
+        </Button>
+      )}
+    </div>
+  );
+}
+
