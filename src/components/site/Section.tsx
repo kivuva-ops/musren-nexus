@@ -14,7 +14,7 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section className={`mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12 lg:py-16 ${className}`}>
+    <section className={`container-page section-y ${className}`}>
       {(eyebrow || title || description) && (
         <div className="max-w-3xl mx-auto mb-8 text-center">
           {eyebrow && (

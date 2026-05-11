@@ -90,6 +90,27 @@
 }
 
 @layer utilities {
+  /* Shared spacing tokens — keep uniform compact rhythm across breakpoints */
+  .container-page { width: 100%; margin-inline: auto; max-width: 80rem; padding-inline: 1rem; }
+  @media (min-width: 640px) { .container-page { padding-inline: 1.5rem; } }
+  @media (min-width: 1024px) { .container-page { padding-inline: 2rem; } }
+
+  .container-wide { width: 100%; margin-inline: auto; max-width: 87.5rem; padding-inline: 1rem; }
+  @media (min-width: 640px) { .container-wide { padding-inline: 1.5rem; } }
+  @media (min-width: 1024px) { .container-wide { padding-inline: 2.5rem; } }
+
+  .section-y { padding-block: 2rem; }
+  @media (min-width: 640px) { .section-y { padding-block: 3rem; } }
+  @media (min-width: 1024px) { .section-y { padding-block: 4rem; } }
+
+  .section-y-lg { padding-block: 2.5rem; }
+  @media (min-width: 640px) { .section-y-lg { padding-block: 4rem; } }
+  @media (min-width: 1024px) { .section-y-lg { padding-block: 5rem; } }
+
+  .stack-sm > * + * { margin-top: 0.75rem; }
+  .stack-md > * + * { margin-top: 1.25rem; }
+  .stack-lg > * + * { margin-top: 2rem; }
+
   .glass {
     background: oklch(1 0 0 / 0.04);
     backdrop-filter: blur(20px) saturate(140%);
