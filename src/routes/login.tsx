@@ -43,6 +43,57 @@ function LoginPage() {
     }
   }, [loading, isAuthenticated, navigate, search.redirect]);
 
+  const friendlyEmailError = (raw: string, mode: "signin" | "signup") => {
+    const m = raw.toLowerCase();
+    if (m.includes("invalid login") || m.includes("invalid credentials"))
+      return "Incorrect email or password. Please try again.";
+    if (m.includes("email not confirmed"))
+      return "Please confirm your email address before signing in. Check your inbox for the confirmation link.";
+    if (m.includes("user already registered") || m.includes("already been registered"))
+      return "An account with this email already exists. Try signing in instead.";
+    if (m.includes("weak password") || m.includes("password should"))
+      return "Password is too weak. Use at least 8 characters with a mix of letters and numbers.";
+    if (m.includes("rate limit") || m.includes("too many"))
+      return "Too many attempts. Please wait a moment and try again.";
+    if (m.includes("network") || m.includes("failed to fetch"))
+      return "Network error. Check your connection and try again.";
+    if (m.includes("not allowed") || m.includes("signups not allowed"))
+      return "Sign-ups are currently disabled. Please contact support.";
+    return mode === "signin"
+      ? "Could not sign you in. Please try again."
+      : "Could not create your account. Please try again.";
+  };
+
+  const friendlyOAuthError = (raw: string, provider: string) => {
+    const m = raw.toLowerCase();
+    if (m.includes("popup") || m.includes("closed"))
+      return `${provider} sign-in was cancelled. Please try again.`;
+    if (m.includes("network") || m.includes("failed to fetch"))
+      return `Network error connecting to ${provider}. Check your connection and try again.`;
+    if (m.includes("not enabled") || m.includes("provider"))
+      return `${provider} sign-in isn't available right now. Please use email or another method.`;
+    return `${provider} sign-in failed. Please try again or use email.`;
+  };
+
+  const handleOAuth = async (provider: "google" | "apple") => {
+    const label = provider === "google" ? "Google" : "Apple";
+    setBusy(true);
+    try {
+      const res = await lovable.auth.signInWithOAuth(provider, {
+        redirect_uri: window.location.origin,
+      });
+      if (res.error) {
+        console.error(`[auth] ${provider} OAuth error:`, res.error);
+        toast.error(friendlyOAuthError(res.error.message ?? "", label));
+      }
+    } catch (err) {
+      console.error(`[auth] ${provider} OAuth exception:`, err);
+      toast.error(friendlyOAuthError((err as Error).message ?? "", label));
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const handle = async (
     e: React.FormEvent<HTMLFormElement>,
     mode: "signin" | "signup",
@@ -54,7 +105,7 @@ function LoginPage() {
       password: String(fd.get("password") ?? ""),
     });
     if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
+      toast.error(parsed.error.issues[0]?.message ?? "Please check your input.");
       return;
     }
     setBusy(true);
@@ -62,7 +113,7 @@ function LoginPage() {
       if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword(parsed.data);
         if (error) throw error;
-        toast.success("Signed in");
+        toast.success("Signed in successfully");
       } else {
         const { error } = await supabase.auth.signUp({
           ...parsed.data,
@@ -72,7 +123,8 @@ function LoginPage() {
         toast.success("Account created. Check your email to confirm.");
       }
     } catch (err) {
-      toast.error((err as Error).message);
+      console.error(`[auth] ${mode} error:`, err);
+      toast.error(friendlyEmailError((err as Error).message ?? "", mode));
     } finally {
       setBusy(false);
     }
@@ -99,11 +151,9 @@ function LoginPage() {
             <Button
               type="button"
               variant="outline"
+              disabled={busy}
               className="w-full glass"
-              onClick={async () => {
-                const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
-                if (res.error) toast.error(res.error.message);
-              }}
+              onClick={() => handleOAuth("google")}
             >
               <svg className="size-4" viewBox="0 0 24 24" aria-hidden><path fill="#EA4335" d="M12 11v3.2h4.5c-.2 1.2-1.4 3.5-4.5 3.5-2.7 0-4.9-2.2-4.9-5s2.2-5 4.9-5c1.5 0 2.6.7 3.2 1.2l2.2-2.1C15.9 5.5 14.1 4.7 12 4.7 7.9 4.7 4.6 8 4.6 12s3.3 7.3 7.4 7.3c4.3 0 7.1-3 7.1-7.2 0-.5-.1-.9-.1-1.1H12z"/></svg>
               Continue with Google
@@ -111,11 +161,9 @@ function LoginPage() {
             <Button
               type="button"
               variant="outline"
+              disabled={busy}
               className="w-full glass"
-              onClick={async () => {
-                const res = await lovable.auth.signInWithOAuth("apple", { redirect_uri: window.location.origin });
-                if (res.error) toast.error(res.error.message);
-              }}
+              onClick={() => handleOAuth("apple")}
             >
               <svg className="size-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.9-1.5-.1-2.8.9-3.6.9-.7 0-1.9-.8-3.1-.8-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.6.8 1.2 1.7 2.5 3 2.5 1.2 0 1.7-.8 3.1-.8s1.9.8 3.1.8 2.2-1.2 3-2.4c.9-1.4 1.3-2.7 1.3-2.8-.1 0-2.7-1-2.7-4zM14.2 5.5c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1.1.1 2.1-.5 2.7-1.3z"/></svg>
               Continue with Apple
