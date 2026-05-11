@@ -5,6 +5,7 @@ import { Section } from "@/components/site/Section";
 import { Button } from "@/components/ui/button";
 import { getProduct, products } from "@/lib/products";
 import { BulkSmsForm } from "@/components/site/BulkSmsForm";
+import { CorporateTopupForm } from "@/components/site/CorporateTopupForm";
 
 export const Route = createFileRoute("/solutions/$slug")({
   loader: ({ params }) => {
@@ -106,12 +107,22 @@ function SolutionDetail() {
 
       <Section
         eyebrow="Get started"
-        title={product.slug === "bulk-sms" ? "Apply for a Sender ID" : `Inquire about ${product.name}`}
+        title={
+          product.slug === "bulk-sms"
+            ? "Apply for a Sender ID"
+            : product.slug === "corporate-topup"
+              ? "Request a Corporate Topup account"
+              : `Inquire about ${product.name}`
+        }
         description="Send us your details and our team will reach out within one business day."
         className="!pt-0"
       >
         <div id="inquiry" className="rounded-3xl glass-strong p-6 sm:p-10 border-gradient">
-          <BulkSmsForm productName={product.name} />
+          {product.slug === "corporate-topup" ? (
+            <CorporateTopupForm />
+          ) : (
+            <BulkSmsForm productName={product.name} />
+          )}
         </div>
       </Section>
 
