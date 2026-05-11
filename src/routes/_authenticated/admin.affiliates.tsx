@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   ArrowLeft, Settings2, Sparkles, Coins, Trophy, ShieldCheck, Wallet, Plus, Save, CheckCircle2, XCircle, Loader2,
+  ImageIcon, Megaphone, Trash2, Upload,
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
@@ -48,15 +49,19 @@ function AffiliateAdminPage() {
           </Link>
         </div>
         <Tabs defaultValue="rules">
-          <TabsList className="grid grid-cols-3 lg:grid-cols-6 w-full">
+          <TabsList className="grid grid-cols-4 lg:grid-cols-8 w-full">
             <TabsTrigger value="rules"><Settings2 className="size-4 mr-1.5" />Rules</TabsTrigger>
+            <TabsTrigger value="assets"><ImageIcon className="size-4 mr-1.5" />Assets</TabsTrigger>
+            <TabsTrigger value="templates"><Megaphone className="size-4 mr-1.5" />Templates</TabsTrigger>
             <TabsTrigger value="promos"><Sparkles className="size-4 mr-1.5" />Promotions</TabsTrigger>
             <TabsTrigger value="rates"><Coins className="size-4 mr-1.5" />Exchange</TabsTrigger>
-            <TabsTrigger value="withdrawals"><Wallet className="size-4 mr-1.5" />Withdrawals</TabsTrigger>
+            <TabsTrigger value="withdrawals"><Wallet className="size-4 mr-1.5" />Payouts</TabsTrigger>
             <TabsTrigger value="config"><ShieldCheck className="size-4 mr-1.5" />Config</TabsTrigger>
             <TabsTrigger value="board"><Trophy className="size-4 mr-1.5" />Leaderboard</TabsTrigger>
           </TabsList>
           <TabsContent value="rules" className="mt-6"><RulesTab canEdit={hasRole("admin")} /></TabsContent>
+          <TabsContent value="assets" className="mt-6"><AssetsTab canEdit={hasRole("admin")} /></TabsContent>
+          <TabsContent value="templates" className="mt-6"><TemplatesTab canEdit={hasRole("admin")} /></TabsContent>
           <TabsContent value="promos" className="mt-6"><PromotionsTab canEdit={hasRole("admin")} /></TabsContent>
           <TabsContent value="rates" className="mt-6"><RatesTab canEdit={hasRole("admin")} /></TabsContent>
           <TabsContent value="withdrawals" className="mt-6"><WithdrawalsTab /></TabsContent>
