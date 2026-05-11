@@ -16,7 +16,30 @@ export const Route = createFileRoute("/_authenticated/affiliates/dashboard")({
 });
 
 function AffiliateDashboard() {
-  const { user } = useAuth();
+  const { user, hasAnyRole } = useAuth();
+  const allowed = hasAnyRole(["affiliate", "admin", "staff"]);
+  if (!allowed) {
+    return (
+      <SiteLayout>
+        <Section
+          eyebrow="Affiliates"
+          title="Affiliate access required"
+          description="Your account isn't enrolled in the affiliate program yet. Apply and our partner team will activate it."
+        >
+          <div className="flex flex-wrap gap-3">
+            <Link to="/contact">
+              <Button className="bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold">
+                Apply to become an affiliate
+              </Button>
+            </Link>
+            <Link to="/affiliates">
+              <Button variant="outline" className="glass">Back to overview</Button>
+            </Link>
+          </div>
+        </Section>
+      </SiteLayout>
+    );
+  }
   const cards = [
     { icon: Link2, title: "Referral links", desc: "Generate and share personal links and QR codes." },
     { icon: BarChart3, title: "Performance", desc: "Clicks, signups, conversions and revenue." },
