@@ -220,7 +220,12 @@ function LoginPage() {
                   <Input id="email" name="email" type="email" required maxLength={255} className="mt-1.5 glass" />
                 </div>
                 <div>
-                  <Label htmlFor="password">Password</Label>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password">Password</Label>
+                    <Link to="/forgot-password" className="text-xs text-muted-foreground hover:text-foreground underline">
+                      Forgot password?
+                    </Link>
+                  </div>
                   <div className="relative mt-1.5">
                     <Input id="password" name="password" type={showSigninPwd ? "text" : "password"} required minLength={8} maxLength={72} className="glass pr-10" />
                     <PwdToggle show={showSigninPwd} onToggle={() => setShowSigninPwd((v) => !v)} />

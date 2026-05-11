@@ -9,9 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PrivacyCenterRouteImport } from './routes/privacy-center'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndustriesRouteImport } from './routes/industries'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as DevelopersRouteImport } from './routes/developers'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BlogRouteImport } from './routes/blog'
@@ -30,6 +32,11 @@ import { Route as AuthenticatedAdminConsentRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminAffiliatesRouteImport } from './routes/_authenticated/admin.affiliates'
 import { Route as ApiPublicRCodeRouteImport } from './routes/api/public/r.$code'
 
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PrivacyCenterRoute = PrivacyCenterRouteImport.update({
   id: '/privacy-center',
   path: '/privacy-center',
@@ -43,6 +50,11 @@ const LoginRoute = LoginRouteImport.update({
 const IndustriesRoute = IndustriesRouteImport.update({
   id: '/industries',
   path: '/industries',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevelopersRoute = DevelopersRouteImport.update({
@@ -143,9 +155,11 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/developers': typeof DevelopersRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -164,9 +178,11 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/developers': typeof DevelopersRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions': typeof SolutionsIndexRoute
   '/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -187,9 +203,11 @@ export interface FileRoutesById {
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/developers': typeof DevelopersRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/privacy-center': typeof PrivacyCenterRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
   '/_authenticated/admin/affiliates': typeof AuthenticatedAdminAffiliatesRoute
@@ -210,9 +228,11 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/developers'
+    | '/forgot-password'
     | '/industries'
     | '/login'
     | '/privacy-center'
+    | '/reset-password'
     | '/solutions/$slug'
     | '/solutions/'
     | '/admin/affiliates'
@@ -231,9 +251,11 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/developers'
+    | '/forgot-password'
     | '/industries'
     | '/login'
     | '/privacy-center'
+    | '/reset-password'
     | '/solutions/$slug'
     | '/solutions'
     | '/admin/affiliates'
@@ -253,9 +275,11 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/developers'
+    | '/forgot-password'
     | '/industries'
     | '/login'
     | '/privacy-center'
+    | '/reset-password'
     | '/solutions/$slug'
     | '/solutions/'
     | '/_authenticated/admin/affiliates'
@@ -276,9 +300,11 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
   DevelopersRoute: typeof DevelopersRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   IndustriesRoute: typeof IndustriesRoute
   LoginRoute: typeof LoginRoute
   PrivacyCenterRoute: typeof PrivacyCenterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SolutionsSlugRoute: typeof SolutionsSlugRoute
   SolutionsIndexRoute: typeof SolutionsIndexRoute
   ApiPublicRCodeRoute: typeof ApiPublicRCodeRoute
@@ -286,6 +312,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/privacy-center': {
       id: '/privacy-center'
       path: '/privacy-center'
@@ -305,6 +338,13 @@ declare module '@tanstack/react-router' {
       path: '/industries'
       fullPath: '/industries'
       preLoaderRoute: typeof IndustriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/developers': {
@@ -461,9 +501,11 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
   DevelopersRoute: DevelopersRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   IndustriesRoute: IndustriesRoute,
   LoginRoute: LoginRoute,
   PrivacyCenterRoute: PrivacyCenterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SolutionsSlugRoute: SolutionsSlugRoute,
   SolutionsIndexRoute: SolutionsIndexRoute,
   ApiPublicRCodeRoute: ApiPublicRCodeRoute,
