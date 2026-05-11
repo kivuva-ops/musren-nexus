@@ -29,6 +29,7 @@ function AffiliateDashboard() {
           description="Your account isn't enrolled in the affiliate program yet. Apply and our partner team will activate it."
         >
           <div className="space-y-5">
+            <RolesBadges highlightMissing="affiliate" />
             <RequestRoleAccess role="affiliate" />
             <div className="flex flex-wrap gap-3">
               <Link to="/affiliates">
