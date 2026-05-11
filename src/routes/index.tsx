@@ -189,26 +189,6 @@ function Home() {
         </div>
       </Section>
 
-      {/* TESTIMONIALS */}
-      <Section eyebrow="Testimonials" title="Loved by operators across the continent">
-        <div className="grid lg:grid-cols-3 gap-5">
-          {[
-            ["Musren's USSD platform turned our SACCO into a true digital service overnight.", "Grace M.", "CTO, SACCO Africa"],
-            ["From OTP to marketing campaigns — one API replaced four vendors.", "David K.", "Head of Engineering, PesaLink"],
-            ["Reliable delivery, real reporting, and humans on the other end.", "Aisha R.", "Marketing Lead, RetailHub"],
-          ].map(([q, n, r]) => (
-            <div key={n} className="glass rounded-2xl p-6">
-              <Quote className="size-6 text-primary/60" />
-              <p className="mt-4 text-foreground/90 leading-relaxed">"{q}"</p>
-              <div className="mt-6 pt-4 border-t border-border">
-                <div className="font-semibold text-sm">{n}</div>
-                <div className="text-xs text-muted-foreground">{r}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
       {/* CTA */}
       <Section>
         <div className="relative rounded-3xl glass-strong overflow-hidden border-gradient p-10 sm:p-16 text-center">

@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndustriesRouteImport } from './routes/industries'
-import { Route as EventsRouteImport } from './routes/events'
 import { Route as DevelopersRouteImport } from './routes/developers'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BlogRouteImport } from './routes/blog'
@@ -29,11 +28,6 @@ const LoginRoute = LoginRouteImport.update({
 const IndustriesRoute = IndustriesRouteImport.update({
   id: '/industries',
   path: '/industries',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EventsRoute = EventsRouteImport.update({
-  id: '/events',
-  path: '/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevelopersRoute = DevelopersRouteImport.update({
@@ -84,7 +78,6 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/developers': typeof DevelopersRoute
-  '/events': typeof EventsRoute
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
@@ -97,7 +90,6 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/developers': typeof DevelopersRoute
-  '/events': typeof EventsRoute
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
@@ -111,7 +103,6 @@ export interface FileRoutesById {
   '/blog': typeof BlogRoute
   '/contact': typeof ContactRoute
   '/developers': typeof DevelopersRoute
-  '/events': typeof EventsRoute
   '/industries': typeof IndustriesRoute
   '/login': typeof LoginRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
@@ -126,7 +117,6 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/developers'
-    | '/events'
     | '/industries'
     | '/login'
     | '/solutions/$slug'
@@ -139,7 +129,6 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/developers'
-    | '/events'
     | '/industries'
     | '/login'
     | '/solutions/$slug'
@@ -152,7 +141,6 @@ export interface FileRouteTypes {
     | '/blog'
     | '/contact'
     | '/developers'
-    | '/events'
     | '/industries'
     | '/login'
     | '/solutions/$slug'
@@ -166,7 +154,6 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRoute
   ContactRoute: typeof ContactRoute
   DevelopersRoute: typeof DevelopersRoute
-  EventsRoute: typeof EventsRoute
   IndustriesRoute: typeof IndustriesRoute
   LoginRoute: typeof LoginRoute
   SolutionsSlugRoute: typeof SolutionsSlugRoute
@@ -187,13 +174,6 @@ declare module '@tanstack/react-router' {
       path: '/industries'
       fullPath: '/industries'
       preLoaderRoute: typeof IndustriesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/events': {
-      id: '/events'
-      path: '/events'
-      fullPath: '/events'
-      preLoaderRoute: typeof EventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/developers': {
@@ -262,7 +242,6 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRoute,
   ContactRoute: ContactRoute,
   DevelopersRoute: DevelopersRoute,
-  EventsRoute: EventsRoute,
   IndustriesRoute: IndustriesRoute,
   LoginRoute: LoginRoute,
   SolutionsSlugRoute: SolutionsSlugRoute,
@@ -271,3 +250,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

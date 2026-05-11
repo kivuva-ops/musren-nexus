@@ -27,7 +27,6 @@ export function Footer() {
       links: [
         ["About", "/about"],
         ["Blog & News", "/blog"],
-        ["Trainings & Events", "/events"],
         ["Contact", "/contact"],
       ],
     },

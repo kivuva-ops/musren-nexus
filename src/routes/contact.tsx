@@ -44,8 +44,8 @@ function ContactPage() {
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="space-y-4">
             {[
-              [Mail, "Email", "hello@musren.com"],
-              [Phone, "Phone", "+254 700 000 000"],
+              [Mail, "Email", "info@musre.co.ke"],
+              [Phone, "Phone", "0729 111 000"],
               [MapPin, "HQ", "Nairobi, Kenya"],
             ].map(([Icon, label, value]) => (
               <div key={label as string} className="glass rounded-2xl p-5 flex items-start gap-4">
