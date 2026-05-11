@@ -107,23 +107,33 @@ function LoginPage() {
   ) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
-    const parsed = credSchema.safeParse({
-      email: String(fd.get("email") ?? ""),
-      password: String(fd.get("password") ?? ""),
-    });
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Please check your input.");
-      return;
+    const email = String(fd.get("email") ?? "");
+    const password = String(fd.get("password") ?? "");
+    if (mode === "signup") {
+      const parsed = signupSchema.safeParse({
+        email, password,
+        confirmPassword: String(fd.get("confirmPassword") ?? ""),
+      });
+      if (!parsed.success) {
+        toast.error(parsed.error.issues[0]?.message ?? "Please check your input.");
+        return;
+      }
+    } else {
+      const parsed = credSchema.safeParse({ email, password });
+      if (!parsed.success) {
+        toast.error(parsed.error.issues[0]?.message ?? "Please check your input.");
+        return;
+      }
     }
     setBusy(true);
     try {
       if (mode === "signin") {
-        const { error } = await supabase.auth.signInWithPassword(parsed.data);
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success("Signed in successfully");
       } else {
         const { error } = await supabase.auth.signUp({
-          ...parsed.data,
+          email, password,
           options: { emailRedirectTo: `${window.location.origin}/login` },
         });
         if (error) throw error;
