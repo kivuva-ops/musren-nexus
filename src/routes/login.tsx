@@ -39,7 +39,7 @@ const signupSchema = credSchema.extend({
 });
 
 function LoginPage() {
-  const { isAuthenticated, loading, user, roles } = useAuth();
+  const { isAuthenticated, loading, user } = useAuth();
   const search = Route.useSearch();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
