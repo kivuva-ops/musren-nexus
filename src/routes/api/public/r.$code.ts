@@ -10,8 +10,9 @@ export const Route = createFileRoute("/api/public/r/$code")({
     handlers: {
       GET: async ({ request, params }) => {
         const url = new URL(request.url);
-        const product = url.searchParams.get("p");
-        const dest = product ? `/solutions/${product}` : "/";
+          const product = url.searchParams.get("p");
+          const channel = url.searchParams.get("ch");
+          const dest = product ? `/solutions/${product}` : "/";
 
         try {
           const SUPABASE_URL = process.env.SUPABASE_URL!;
@@ -33,7 +34,8 @@ export const Route = createFileRoute("/api/public/r/$code")({
             _ip_hash: ipHash,
             _ua_hash: uaHash,
             _revenue_cents: 0,
-          });
+            _channel: channel,
+          } as any);
         } catch (e) {
           // never block the redirect on tracking failure
           console.error("referral tracking failed:", e);
