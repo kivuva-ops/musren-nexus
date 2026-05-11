@@ -79,7 +79,7 @@ function LoginPage() {
 
   return (
     <SiteLayout>
-      <section className="mx-auto max-w-md px-4 py-10 sm:py-14">
+      <section className="mx-auto max-w-md px-4 section-y">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2">
             <div className="size-9 rounded-lg bg-gradient-to-br from-primary to-accent grid place-items-center">
