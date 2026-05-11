@@ -25,6 +25,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSlugRouteImport } from './routes/solutions/$slug'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDevelopersDashboardRouteImport } from './routes/_authenticated/developers.dashboard'
 import { Route as AuthenticatedAffiliatesDashboardRouteImport } from './routes/_authenticated/affiliates.dashboard'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
@@ -113,6 +114,11 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDevelopersDashboardRoute =
   AuthenticatedDevelopersDashboardRouteImport.update({
     id: '/developers/dashboard',
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/select-role': typeof SelectRoleRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/select-role': typeof SelectRoleRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions': typeof SolutionsIndexRoute
@@ -225,6 +233,7 @@ export interface FileRoutesById {
   '/privacy-center': typeof PrivacyCenterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/select-role': typeof SelectRoleRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/solutions/$slug': typeof SolutionsSlugRoute
   '/solutions/': typeof SolutionsIndexRoute
@@ -252,6 +261,7 @@ export interface FileRouteTypes {
     | '/privacy-center'
     | '/reset-password'
     | '/select-role'
+    | '/dashboard'
     | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions/'
@@ -277,6 +287,7 @@ export interface FileRouteTypes {
     | '/privacy-center'
     | '/reset-password'
     | '/select-role'
+    | '/dashboard'
     | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions'
@@ -303,6 +314,7 @@ export interface FileRouteTypes {
     | '/privacy-center'
     | '/reset-password'
     | '/select-role'
+    | '/_authenticated/dashboard'
     | '/auth/callback'
     | '/solutions/$slug'
     | '/solutions/'
@@ -450,6 +462,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/developers/dashboard': {
       id: '/_authenticated/developers/dashboard'
       path: '/developers/dashboard'
@@ -510,6 +529,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedAdminAffiliatesRoute: typeof AuthenticatedAdminAffiliatesRoute
   AuthenticatedAdminConsentRoute: typeof AuthenticatedAdminConsentRoute
   AuthenticatedAdminCorporateTopupRoute: typeof AuthenticatedAdminCorporateTopupRoute
@@ -520,6 +540,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedAdminAffiliatesRoute: AuthenticatedAdminAffiliatesRoute,
   AuthenticatedAdminConsentRoute: AuthenticatedAdminConsentRoute,
   AuthenticatedAdminCorporateTopupRoute: AuthenticatedAdminCorporateTopupRoute,
