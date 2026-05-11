@@ -32,22 +32,22 @@ function Home() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background/60 via-background/85 to-background" aria-hidden />
         <div className="absolute inset-0 -z-10 grid-bg opacity-30" aria-hidden />
 
-        <div className="mx-auto max-w-7xl px-4 pt-20 pb-32 sm:pt-28 sm:pb-40">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-xs font-medium text-primary">
-              <Sparkles className="size-3.5" /> 6+ years powering African enterprises
+        <div className="mx-auto max-w-[1400px] px-6 lg:px-10 pt-20 pb-32 sm:pt-28 sm:pb-40 w-full">
+          <div className="mx-auto text-center max-w-5xl">
+            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm font-semibold text-primary border border-primary/30 shadow-[0_0_30px_-8px_var(--primary)]">
+              <Sparkles className="size-4" /> Trusted for 6+ years powering African enterprises
             </span>
-            <h1 className="mt-6 text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.02] tracking-tight">
+            <h1 className="mt-8 text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[1.02] tracking-tight">
               Technology and{" "}
               <span className="text-gradient">Customer Experience</span>{" "}
               Converge with Musren
             </h1>
-            <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+            <p className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Trusted telecom and customer engagement technology partner delivering Bulk
               SMS, USSD, Shortcodes, WhatsApp solutions, APIs, and enterprise messaging
               infrastructure.
             </p>
-            <div className="mt-10 flex flex-wrap gap-3">
+            <div className="mt-10 flex flex-wrap gap-3 justify-center">
               <Link to="/contact">
                 <Button size="lg" className="bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold glow hover:opacity-90">
                   Talk to sales <ArrowRight className="ml-1 size-4" />
@@ -60,16 +60,16 @@ function Home() {
               </Link>
             </div>
 
-            <div className="mt-14 grid grid-cols-2 sm:grid-cols-4 gap-6">
+            <div className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-4xl mx-auto">
               {[
                 ["6+", "Years experience"],
                 ["10M+", "Messages / month"],
                 ["99.9%", "Uptime SLA"],
                 ["50+", "Enterprise clients"],
               ].map(([k, v]) => (
-                <div key={v}>
-                  <div className="font-display text-3xl font-bold text-gradient">{k}</div>
-                  <div className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">{v}</div>
+                <div key={v} className="text-center">
+                  <div className="font-display text-4xl sm:text-5xl font-bold text-gradient">{k}</div>
+                  <div className="text-xs text-muted-foreground mt-2 uppercase tracking-wider">{v}</div>
                 </div>
               ))}
             </div>
