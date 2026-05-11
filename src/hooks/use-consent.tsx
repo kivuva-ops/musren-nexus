@@ -85,7 +85,7 @@ export function ConsentProvider({ children }: { children: ReactNode }) {
         if (versionsOk) {
           const merged: ConsentMap = { ...DEFAULT };
           for (const r of data) {
-            merged[r.category as ConsentCategory] = r.granted;
+            merged[r.category as ConsentCategory] = !!r.granted;
           }
           merged.necessary = true;
           setChoices(merged);
