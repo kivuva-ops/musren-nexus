@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Menu, X, Zap } from "lucide-react";
+import { LogOut, Menu, X, Zap, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/use-auth";
 
 const links = [
   { to: "/", label: "Home" },
@@ -17,6 +18,8 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { isAuthenticated, hasAnyRole, signOut } = useAuth();
+  const canAdmin = hasAnyRole(["admin", "staff"]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -62,9 +65,22 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Link to="/login" className="hidden sm:block">
-              <Button variant="ghost" size="sm">Login</Button>
-            </Link>
+            {canAdmin && (
+              <Link to="/admin/corporate-topup" className="hidden md:block">
+                <Button variant="ghost" size="sm">
+                  <LayoutDashboard className="size-4 mr-1.5" /> Admin
+                </Button>
+              </Link>
+            )}
+            {isAuthenticated ? (
+              <Button variant="ghost" size="sm" onClick={signOut} className="hidden sm:inline-flex">
+                <LogOut className="size-4 mr-1.5" /> Sign out
+              </Button>
+            ) : (
+              <Link to="/login" className="hidden sm:block">
+                <Button variant="ghost" size="sm">Login</Button>
+              </Link>
+            )}
             <Link to="/contact">
               <Button size="sm" className="bg-gradient-to-r from-primary to-accent text-primary-foreground hover:opacity-90 font-medium">
                 Get started

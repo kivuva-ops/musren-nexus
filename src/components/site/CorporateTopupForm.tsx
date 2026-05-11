@@ -96,9 +96,25 @@ export function CorporateTopupForm() {
     }
 
     setLoading(true);
-    // TODO: persist to Lovable Cloud once enabled
-    await new Promise((r) => setTimeout(r, 700));
+    const { error } = await supabase.from("corporate_topup_inquiries").insert({
+      company: parsed.data.company,
+      industry: parsed.data.industry ?? null,
+      contact_name: parsed.data.contactName,
+      email: parsed.data.email,
+      phone: parsed.data.phone,
+      role: parsed.data.role ?? null,
+      network: parsed.data.network,
+      estimated_volume: parsed.data.volume,
+      frequency: parsed.data.frequency,
+      use_cases: parsed.data.useCases,
+      preferred_contact: parsed.data.preferredContact,
+      notes: parsed.data.notes ?? null,
+    });
     setLoading(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     setSubmitted(true);
     toast.success("Inquiry received — our corporate desk will be in touch.");
   };
