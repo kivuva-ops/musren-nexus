@@ -16,7 +16,30 @@ export const Route = createFileRoute("/_authenticated/developers/dashboard")({
 });
 
 function DeveloperDashboard() {
-  const { user } = useAuth();
+  const { user, hasAnyRole } = useAuth();
+  const allowed = hasAnyRole(["developer", "admin", "staff"]);
+  if (!allowed) {
+    return (
+      <SiteLayout>
+        <Section
+          eyebrow="Developers"
+          title="Developer access required"
+          description="Your account doesn't have developer access yet. Request access and our team will enable it."
+        >
+          <div className="flex flex-wrap gap-3">
+            <Link to="/contact">
+              <Button className="bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold">
+                Request developer access
+              </Button>
+            </Link>
+            <Link to="/developers">
+              <Button variant="outline" className="glass">Back to overview</Button>
+            </Link>
+          </div>
+        </Section>
+      </SiteLayout>
+    );
+  }
   const cards = [
     { icon: KeyRound, title: "API keys", desc: "Create and rotate sandbox and live keys." },
     { icon: Webhook, title: "Webhooks", desc: "Configure endpoints with signed payloads." },
