@@ -37,7 +37,8 @@ function LoginPage() {
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      navigate({ to: search.redirect ?? "/admin/corporate-topup" });
+      const target = search.redirect ?? "/admin/corporate-topup";
+      navigate({ to: target as "/admin/corporate-topup" });
     }
   }, [loading, isAuthenticated, navigate, search.redirect]);
 
