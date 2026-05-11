@@ -699,7 +699,13 @@ export type Database = {
     }
     Enums: {
       affiliate_event_kind: "click" | "signup" | "purchase"
-      app_role: "admin" | "staff" | "user" | "developer" | "affiliate"
+      app_role:
+        | "admin"
+        | "staff"
+        | "user"
+        | "developer"
+        | "affiliate"
+        | "superadmin"
       consent_category:
         | "necessary"
         | "analytics"
@@ -841,7 +847,14 @@ export const Constants = {
   public: {
     Enums: {
       affiliate_event_kind: ["click", "signup", "purchase"],
-      app_role: ["admin", "staff", "user", "developer", "affiliate"],
+      app_role: [
+        "admin",
+        "staff",
+        "user",
+        "developer",
+        "affiliate",
+        "superadmin",
+      ],
       consent_category: [
         "necessary",
         "analytics",
