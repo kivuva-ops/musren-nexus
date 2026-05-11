@@ -75,6 +75,9 @@ export function Navbar() {
                 <Link to="/admin/role-requests" className="hidden lg:block">
                   <Button variant="ghost" size="sm">Role requests</Button>
                 </Link>
+                <Link to="/admin/affiliates" className="hidden lg:block">
+                  <Button variant="ghost" size="sm">Affiliates</Button>
+                </Link>
               </>
             )}
             {isAuthenticated ? (
