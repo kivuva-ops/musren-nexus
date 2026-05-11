@@ -838,6 +838,8 @@ export type Database = {
         | "developer"
         | "affiliate"
         | "superadmin"
+        | "customer"
+        | "merchant"
       consent_category:
         | "necessary"
         | "analytics"
@@ -987,6 +989,8 @@ export const Constants = {
         "developer",
         "affiliate",
         "superadmin",
+        "customer",
+        "merchant",
       ],
       consent_category: [
         "necessary",
