@@ -117,16 +117,25 @@ function DashboardPage() {
           <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 capitalize">
             {displayRole} account
           </Badge>
-          {canClaimSuperadmin && (
-            <div className="glass rounded-2xl border border-primary/30 p-4 flex flex-col sm:flex-row items-center gap-3">
-              <ShieldCheck className="size-5 text-primary" />
-              <p className="text-sm text-muted-foreground">
-                No Super Admin exists yet. Claim it to manage all users.
-              </p>
+        </div>
+        {canClaimSuperadmin && (
+          <div className="mx-auto mb-10 max-w-5xl rounded-3xl border-2 border-primary/50 bg-gradient-to-br from-primary/15 via-accent/10 to-primary/5 p-8 sm:p-12 shadow-[0_20px_60px_-20px_hsl(var(--primary)/0.5)] ring-4 ring-primary/20 animate-pulse-slow">
+            <div className="flex flex-col items-center gap-6 text-center">
+              <div className="rounded-full bg-primary/20 p-5 ring-8 ring-primary/10">
+                <ShieldCheck className="size-14 text-primary" />
+              </div>
+              <div className="space-y-3">
+                <h2 className="font-display text-3xl sm:text-5xl font-extrabold tracking-tight">
+                  Claim <span className="text-gradient">Super Admin</span>
+                </h2>
+                <p className="text-base sm:text-xl text-muted-foreground max-w-2xl">
+                  No Super Admin exists yet. Claim this role now to manage all users, roles, and admin settings across Musren.
+                </p>
+              </div>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button disabled={claiming} size="sm" className="bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold">
-                    {claiming ? <Loader2 className="size-4 animate-spin" /> : "Claim Super Admin"}
+                  <Button disabled={claiming} size="lg" className="h-14 px-10 text-lg bg-gradient-to-r from-primary to-accent text-primary-foreground font-bold shadow-xl hover:scale-105 transition-transform">
+                    {claiming ? <Loader2 className="size-5 animate-spin" /> : <><ShieldCheck className="size-5" /> Claim Super Admin</>}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -145,8 +154,8 @@ function DashboardPage() {
                 </AlertDialogContent>
               </AlertDialog>
             </div>
-          )}
-        </div>
+          </div>
+        )}
         <div className="grid gap-4 md:grid-cols-3">
           <WorkspaceCard icon={UsersRound} title="Customer tools" description="Explore Musren solutions and request product access." href="/solutions" />
           <WorkspaceCard icon={HandCoins} title="Affiliate workspace" description="Share referrals and track your rewards." href="/affiliates/dashboard" />
