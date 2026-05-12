@@ -1,6 +1,17 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowRight, BriefcaseBusiness, HandCoins, Loader2, ShieldCheck, ShoppingBag, UsersRound } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { Button } from "@/components/ui/button";
@@ -112,9 +123,27 @@ function DashboardPage() {
               <p className="text-sm text-muted-foreground">
                 No Super Admin exists yet. Claim it to manage all users.
               </p>
-              <Button onClick={claimSuperadmin} disabled={claiming} size="sm" className="bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold">
-                {claiming ? <Loader2 className="size-4 animate-spin" /> : "Claim Super Admin"}
-              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button disabled={claiming} size="sm" className="bg-gradient-to-r from-primary to-accent text-primary-foreground font-semibold">
+                    {claiming ? <Loader2 className="size-4 animate-spin" /> : "Claim Super Admin"}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Claim Super Admin role?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This grants your account ({user?.email}) full control over all users, roles, and admin settings. Only the first user can claim this — it cannot be undone from here.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel disabled={claiming}>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={claimSuperadmin} disabled={claiming}>
+                      {claiming ? <Loader2 className="size-4 animate-spin" /> : "Yes, claim it"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           )}
         </div>
