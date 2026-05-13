@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, ShieldAlert, Crown, ShieldCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth, type AppRole } from "@/hooks/use-auth";
-import { SiteLayout } from "@/components/site/SiteLayout";
+import { AdminShell as SiteLayout } from "@/components/layouts/AdminShell";
 import { Section } from "@/components/site/Section";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";

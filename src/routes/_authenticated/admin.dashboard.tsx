@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, ShieldCheck, Users, Megaphone, FileCheck2, Receipt } from "lucide-react";
-import { SiteLayout } from "@/components/site/SiteLayout";
+import { AdminShell as SiteLayout } from "@/components/layouts/AdminShell";
 import { Section } from "@/components/site/Section";
 import { useAuth } from "@/hooks/use-auth";
 

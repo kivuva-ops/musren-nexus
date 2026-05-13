@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/integrations/supabase/client";
-import { SiteLayout } from "@/components/site/SiteLayout";
+import { AdminShell as SiteLayout } from "@/components/layouts/AdminShell";
 import { Section } from "@/components/site/Section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

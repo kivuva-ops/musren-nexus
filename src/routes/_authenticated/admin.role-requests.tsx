@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ArrowLeft, CheckCircle2, XCircle, ShieldAlert, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import { SiteLayout } from "@/components/site/SiteLayout";
+import { AdminShell as SiteLayout } from "@/components/layouts/AdminShell";
 import { Section } from "@/components/site/Section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
