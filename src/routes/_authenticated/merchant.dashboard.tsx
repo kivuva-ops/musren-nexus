@@ -5,7 +5,6 @@ import { Section } from "@/components/site/Section";
 import { useAuth } from "@/hooks/use-auth";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { RequestRoleAccess } from "@/components/site/RequestRoleAccess";
 import { RolesBadges } from "@/components/site/RolesBadges";
 
 export const Route = createFileRoute("/_authenticated/merchant/dashboard")({
@@ -41,8 +40,10 @@ function MerchantDashboard() {
         >
           <div className="space-y-5">
             <RolesBadges highlightMissing="merchant" />
-            <RequestRoleAccess role="merchant" />
-            <Link to="/"><Button variant="outline" className="glass">Back home</Button></Link>
+            <p className="text-sm text-muted-foreground max-w-md">
+              Contact a Musren admin to enable merchant access for your account.
+            </p>
+            <Link to="/contact"><Button variant="outline" className="glass">Contact support</Button></Link>
           </div>
         </Section>
       </SiteLayout>
