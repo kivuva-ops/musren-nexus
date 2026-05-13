@@ -1,10 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { ArrowRight, Check, Code2, Globe2, Shield, Sparkles, Users, Zap, BarChart3 } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section } from "@/components/site/Section";
 import { ProductCard } from "@/components/site/ProductCard";
 import { Button } from "@/components/ui/button";
 import { products } from "@/lib/products";
+import { useAuth } from "@/hooks/use-auth";
+import { dashboardForAccess } from "@/lib/onboarding";
 import heroImg from "@/assets/hero-network.jpg";
 
 export const Route = createFileRoute("/")({
@@ -20,6 +23,15 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const { isAuthenticated, loading, roles } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!loading && isAuthenticated) {
+      const target = dashboardForAccess(null, roles);
+      navigate({ to: target as "/customer/dashboard", replace: true });
+    }
+  }, [loading, isAuthenticated, roles, navigate]);
+
   return (
     <SiteLayout>
       {/* HERO */}
