@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Gift, Wallet, Sparkles, Receipt, UserRound, Users } from "lucide-react";
-import { SiteLayout } from "@/components/site/SiteLayout";
+import { CustomerShell } from "@/components/layouts/CustomerShell";
 import { Section } from "@/components/site/Section";
 import { useAuth } from "@/hooks/use-auth";
 import { Badge } from "@/components/ui/badge";
@@ -27,7 +27,7 @@ const cards = [
 function CustomerDashboard() {
   const { user } = useAuth();
   return (
-    <SiteLayout>
+    <CustomerShell>
       <Section
         eyebrow="Customer"
         title={<>Welcome, <span className="text-gradient">{user?.email?.split("@")[0]}</span></>}
@@ -47,6 +47,6 @@ function CustomerDashboard() {
           <Link to="/solutions" className="text-sm text-primary hover:underline">Browse Musren solutions →</Link>
         </div>
       </Section>
-    </SiteLayout>
+    </CustomerShell>
   );
 }

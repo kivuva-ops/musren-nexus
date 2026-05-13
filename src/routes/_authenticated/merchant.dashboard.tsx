@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Megaphone, Users, TrendingUp, BarChart3, Settings2, Upload, LayoutTemplate } from "lucide-react";
-import { SiteLayout } from "@/components/site/SiteLayout";
+import { MerchantShell as SiteLayout } from "@/components/layouts/MerchantShell";
 import { Section } from "@/components/site/Section";
 import { useAuth } from "@/hooks/use-auth";
 import { Badge } from "@/components/ui/badge";
