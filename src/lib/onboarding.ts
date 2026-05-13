@@ -25,16 +25,18 @@ export const roleLabels: Record<ProfileRole, string> = {
 export const dashboardForRole = (role?: ProfileRole | null) => {
   if (role === "affiliate") return "/affiliates/dashboard";
   if (role === "developer") return "/developers/dashboard";
-  return "/dashboard";
+  if (role === "merchant") return "/merchant/dashboard";
+  if (role === "customer") return "/customer/dashboard";
+  return "/customer/dashboard";
 };
 
 export const dashboardForAccess = (profile?: UserProfile | null, roles: string[] = []) => {
-  if (roles.includes("superadmin")) {
-    return "/admin/users";
-  }
-  if (roles.some((role) => role === "admin" || role === "staff")) {
-    return "/admin/dashboard";
-  }
+  if (roles.includes("superadmin")) return "/admin/users";
+  if (roles.some((role) => role === "admin" || role === "staff")) return "/admin/dashboard";
+  if (roles.includes("affiliate")) return "/affiliates/dashboard";
+  if (roles.includes("developer")) return "/developers/dashboard";
+  if (roles.includes("merchant")) return "/merchant/dashboard";
+  if (roles.includes("customer")) return "/customer/dashboard";
   return dashboardForRole(profile?.role);
 };
 

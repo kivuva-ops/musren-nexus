@@ -78,10 +78,8 @@ function DashboardPage() {
         return;
       }
       const target = dashboardForAccess(nextProfile, roles);
-      if (target !== "/dashboard") {
-        navigate({ to: target as "/dashboard", replace: true });
-        return;
-      }
+      navigate({ to: target as "/customer/dashboard", replace: true });
+      return;
       setProfile(nextProfile);
       setChecking(false);
     };

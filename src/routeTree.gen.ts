@@ -26,7 +26,9 @@ import { Route as SolutionsIndexRouteImport } from './routes/solutions/index'
 import { Route as SolutionsSlugRouteImport } from './routes/solutions/$slug'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedMerchantDashboardRouteImport } from './routes/_authenticated/merchant.dashboard'
 import { Route as AuthenticatedDevelopersDashboardRouteImport } from './routes/_authenticated/developers.dashboard'
+import { Route as AuthenticatedCustomerDashboardRouteImport } from './routes/_authenticated/customer.dashboard'
 import { Route as AuthenticatedAffiliatesDashboardRouteImport } from './routes/_authenticated/affiliates.dashboard'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminRoleRequestsRouteImport } from './routes/_authenticated/admin.role-requests'
@@ -121,10 +123,22 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedMerchantDashboardRoute =
+  AuthenticatedMerchantDashboardRouteImport.update({
+    id: '/merchant/dashboard',
+    path: '/merchant/dashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedDevelopersDashboardRoute =
   AuthenticatedDevelopersDashboardRouteImport.update({
     id: '/developers/dashboard',
     path: '/developers/dashboard',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedCustomerDashboardRoute =
+  AuthenticatedCustomerDashboardRouteImport.update({
+    id: '/customer/dashboard',
+    path: '/customer/dashboard',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAffiliatesDashboardRoute =
@@ -204,7 +218,9 @@ export interface FileRoutesByFullPath {
   '/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
+  '/customer/dashboard': typeof AuthenticatedCustomerDashboardRoute
   '/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
+  '/merchant/dashboard': typeof AuthenticatedMerchantDashboardRoute
   '/affiliates/promote/$slug': typeof AuthenticatedAffiliatesPromoteSlugRoute
   '/api/public/r/$code': typeof ApiPublicRCodeRoute
 }
@@ -232,7 +248,9 @@ export interface FileRoutesByTo {
   '/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
+  '/customer/dashboard': typeof AuthenticatedCustomerDashboardRoute
   '/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
+  '/merchant/dashboard': typeof AuthenticatedMerchantDashboardRoute
   '/affiliates/promote/$slug': typeof AuthenticatedAffiliatesPromoteSlugRoute
   '/api/public/r/$code': typeof ApiPublicRCodeRoute
 }
@@ -262,7 +280,9 @@ export interface FileRoutesById {
   '/_authenticated/admin/role-requests': typeof AuthenticatedAdminRoleRequestsRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/affiliates/dashboard': typeof AuthenticatedAffiliatesDashboardRoute
+  '/_authenticated/customer/dashboard': typeof AuthenticatedCustomerDashboardRoute
   '/_authenticated/developers/dashboard': typeof AuthenticatedDevelopersDashboardRoute
+  '/_authenticated/merchant/dashboard': typeof AuthenticatedMerchantDashboardRoute
   '/_authenticated/affiliates/promote/$slug': typeof AuthenticatedAffiliatesPromoteSlugRoute
   '/api/public/r/$code': typeof ApiPublicRCodeRoute
 }
@@ -292,7 +312,9 @@ export interface FileRouteTypes {
     | '/admin/role-requests'
     | '/admin/users'
     | '/affiliates/dashboard'
+    | '/customer/dashboard'
     | '/developers/dashboard'
+    | '/merchant/dashboard'
     | '/affiliates/promote/$slug'
     | '/api/public/r/$code'
   fileRoutesByTo: FileRoutesByTo
@@ -320,7 +342,9 @@ export interface FileRouteTypes {
     | '/admin/role-requests'
     | '/admin/users'
     | '/affiliates/dashboard'
+    | '/customer/dashboard'
     | '/developers/dashboard'
+    | '/merchant/dashboard'
     | '/affiliates/promote/$slug'
     | '/api/public/r/$code'
   id:
@@ -349,7 +373,9 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/role-requests'
     | '/_authenticated/admin/users'
     | '/_authenticated/affiliates/dashboard'
+    | '/_authenticated/customer/dashboard'
     | '/_authenticated/developers/dashboard'
+    | '/_authenticated/merchant/dashboard'
     | '/_authenticated/affiliates/promote/$slug'
     | '/api/public/r/$code'
   fileRoutesById: FileRoutesById
@@ -495,11 +521,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/merchant/dashboard': {
+      id: '/_authenticated/merchant/dashboard'
+      path: '/merchant/dashboard'
+      fullPath: '/merchant/dashboard'
+      preLoaderRoute: typeof AuthenticatedMerchantDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/developers/dashboard': {
       id: '/_authenticated/developers/dashboard'
       path: '/developers/dashboard'
       fullPath: '/developers/dashboard'
       preLoaderRoute: typeof AuthenticatedDevelopersDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/customer/dashboard': {
+      id: '/_authenticated/customer/dashboard'
+      path: '/customer/dashboard'
+      fullPath: '/customer/dashboard'
+      preLoaderRoute: typeof AuthenticatedCustomerDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/affiliates/dashboard': {
@@ -577,7 +617,9 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAdminRoleRequestsRoute: typeof AuthenticatedAdminRoleRequestsRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAffiliatesDashboardRoute: typeof AuthenticatedAffiliatesDashboardRoute
+  AuthenticatedCustomerDashboardRoute: typeof AuthenticatedCustomerDashboardRoute
   AuthenticatedDevelopersDashboardRoute: typeof AuthenticatedDevelopersDashboardRoute
+  AuthenticatedMerchantDashboardRoute: typeof AuthenticatedMerchantDashboardRoute
   AuthenticatedAffiliatesPromoteSlugRoute: typeof AuthenticatedAffiliatesPromoteSlugRoute
 }
 
@@ -590,7 +632,9 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAdminRoleRequestsRoute: AuthenticatedAdminRoleRequestsRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAffiliatesDashboardRoute: AuthenticatedAffiliatesDashboardRoute,
+  AuthenticatedCustomerDashboardRoute: AuthenticatedCustomerDashboardRoute,
   AuthenticatedDevelopersDashboardRoute: AuthenticatedDevelopersDashboardRoute,
+  AuthenticatedMerchantDashboardRoute: AuthenticatedMerchantDashboardRoute,
   AuthenticatedAffiliatesPromoteSlugRoute:
     AuthenticatedAffiliatesPromoteSlugRoute,
 }
