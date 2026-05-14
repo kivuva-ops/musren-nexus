@@ -42,9 +42,33 @@ const roleStyles: Record<RoleShellProps["role"], string> = {
   merchant: "from-amber-500/10 via-primary/10 to-background",
 };
 
-export function RoleShell({ role, brand, items, children }: RoleShellProps) {
+export function RoleShell({ role, brand, items, cookieKey }: RoleShellProps & { cookieKey?: string }) { return null as never; }
+// Real implementation below
+export function RoleShellImpl({ role, brand, items, cookieKey, children }: RoleShellProps) {
+  const storageKey = `sidebar:open:${cookieKey ?? role}`;
+  const [open, setOpen] = useState<boolean>(true);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored !== null) setOpen(stored === "1");
+    } catch { /* ignore */ }
+    setHydrated(true);
+  }, [storageKey]);
+
+  const handleOpenChange = (next: boolean) => {
+    setOpen(next);
+    try {
+      localStorage.setItem(storageKey, next ? "1" : "0");
+      document.cookie = `${storageKey}=${next ? "1" : "0"}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+    } catch { /* ignore */ }
+  };
+
+  if (!hydrated) return null;
+
   return (
-    <SidebarProvider>
+    <SidebarProvider open={open} onOpenChange={handleOpenChange}>
       <div className={`min-h-screen flex w-full bg-gradient-to-br ${roleStyles[role]}`}>
         <RoleSidebar role={role} brand={brand} items={items} />
         <div className="flex-1 flex flex-col min-w-0">
