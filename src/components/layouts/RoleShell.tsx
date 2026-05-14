@@ -42,9 +42,7 @@ const roleStyles: Record<RoleShellProps["role"], string> = {
   merchant: "from-amber-500/10 via-primary/10 to-background",
 };
 
-export function RoleShell({ role, brand, items, cookieKey }: RoleShellProps & { cookieKey?: string }) { return null as never; }
-// Real implementation below
-export function RoleShellImpl({ role, brand, items, cookieKey, children }: RoleShellProps) {
+export function RoleShell({ role, brand, items, cookieKey, children }: RoleShellProps) {
   const storageKey = `sidebar:open:${cookieKey ?? role}`;
   const [open, setOpen] = useState<boolean>(true);
   const [hydrated, setHydrated] = useState(false);
